@@ -1,11 +1,10 @@
-import Image from "next/image";
+import Login from "./auth/sign-in/page";
+import SignUp from "./auth/sign-up/page";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <h1 className="font-sans text-6xl">Olá Mundo</h1>
-      </div>
+    <main className="flex flex-row min-h-screen max-w-full justify-center items-center">
+        <SignUp/>
     </main>
   );
 }
