@@ -6,7 +6,7 @@ const Input = ({ label, type, name, className, error, ...props }:any ) => {
         <>
             <div className="flex-col w-full">
                 <label 
-                    className="py-1 block text-lg font-medium leading-6 text-gray-900 mb-1"
+                    className="flex items-initial py-1 text-lg font-medium leading-6 text-gray-900 mb-1"
                 >
                         {label}
                 </label>
