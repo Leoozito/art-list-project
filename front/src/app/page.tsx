@@ -1,6 +1,6 @@
 import SideBar from "@/components/Sidebar";
 import AlertDialog from "@/components/Dialogues/AlertDialog";
-import Playlist from "./playlist/page";
+import Playlist from "./(admin-routes)/playlist/page";
 
 export default function Home() {
   return (

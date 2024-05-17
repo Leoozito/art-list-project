@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Radio_Canada } from "next/font/google";
 import "./globals.css";
+import NextAuthSessionProvider from '@/providers/sessionProviders'
 
 const mainFont =  Radio_Canada({ 
   subsets: ["latin"],
@@ -20,7 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={mainFont.variable}>
-      <body>{children}</body>
+      <body>
+        <NextAuthSessionProvider>
+          {children}
+        </NextAuthSessionProvider>
+      </body>
     </html>
   );
 }
