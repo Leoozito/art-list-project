@@ -4,6 +4,7 @@ class AlbumsController < ApplicationController
   # GET /albums or /albums.json
   def index
     @albums = Album.all
+    render json: @users 
   end
 
   # GET /albums/1 or /albums/1.json
@@ -13,6 +14,7 @@ class AlbumsController < ApplicationController
   # GET /albums/new
   def new
     @album = Album.new
+    render json: @users 
   end
 
   # GET /albums/1/edit
@@ -25,10 +27,8 @@ class AlbumsController < ApplicationController
 
     respond_to do |format|
       if @album.save
-        format.html { redirect_to album_url(@album), notice: "Album was successfully created." }
-        format.json { render :show, status: :created, location: @album }
+        format.json { render :show, status: :created, location: @album, message: "Album was successfully created." }
       else
-        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @album.errors, status: :unprocessable_entity }
       end
     end
@@ -38,10 +38,8 @@ class AlbumsController < ApplicationController
   def update
     respond_to do |format|
       if @album.update(album_params)
-        format.html { redirect_to album_url(@album), notice: "Album was successfully updated." }
-        format.json { render :show, status: :ok, location: @album }
+        format.json { render :show, status: :ok, location: @album, message: "Album was successfully updated." }
       else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @album.errors, status: :unprocessable_entity }
       end
     end
@@ -52,8 +50,7 @@ class AlbumsController < ApplicationController
     @album.destroy!
 
     respond_to do |format|
-      format.html { redirect_to albums_url, notice: "Album was successfully destroyed." }
-      format.json { head :no_content }
+      format.json { head :no_content, message: "Album was successfully destroyed."  }
     end
   end
 
@@ -65,6 +62,6 @@ class AlbumsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def album_params
-      params.require(:album).permit(:artistAlbum, :albumName, :yearAlbum)
+      params.require(:album).permit(:artist, :name_album, :year_album)
     end
 end

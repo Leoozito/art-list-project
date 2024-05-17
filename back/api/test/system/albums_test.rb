@@ -14,9 +14,9 @@ class AlbumsTest < ApplicationSystemTestCase
     visit albums_url
     click_on "New album"
 
-    fill_in "Albumname", with: @album.albumName
-    fill_in "Artistalbum", with: @album.artistAlbum
-    fill_in "Yearalbum", with: @album.yearAlbum
+    fill_in "Artist", with: @album.artist
+    fill_in "Name album", with: @album.name_album
+    fill_in "Year album", with: @album.year_album
     click_on "Create Album"
 
     assert_text "Album was successfully created"
@@ -27,9 +27,9 @@ class AlbumsTest < ApplicationSystemTestCase
     visit album_url(@album)
     click_on "Edit this album", match: :first
 
-    fill_in "Albumname", with: @album.albumName
-    fill_in "Artistalbum", with: @album.artistAlbum
-    fill_in "Yearalbum", with: @album.yearAlbum
+    fill_in "Artist", with: @album.artist
+    fill_in "Name album", with: @album.name_album
+    fill_in "Year album", with: @album.year_album
     click_on "Update Album"
 
     assert_text "Album was successfully updated"

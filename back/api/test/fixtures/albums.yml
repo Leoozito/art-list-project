@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  artistAlbum: MyString
-  albumName: MyString
-  yearAlbum: MyString
+  artist: MyString
+  name_album: MyString
+  year_album: MyString
 
 two:
-  artistAlbum: MyString
-  albumName: MyString
-  yearAlbum: MyString
+  artist: MyString
+  name_album: MyString
+  year_album: MyString
