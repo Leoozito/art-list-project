@@ -10,28 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 0) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_17_063014) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "albums", id: :serial, force: :cascade do |t|
-    t.string "artist", limit: 50, null: false
-    t.string "namealbum", limit: 50, null: false
-    t.string "yearalbum", limit: 255, null: false
-
-    t.unique_constraint ["yearalbum"], name: "albums_yearalbum_key"
+  create_table "albums", force: :cascade do |t|
+    t.string "artist"
+    t.string "name_album"
+    t.string "year_album"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
   end
 
-  create_table "users", id: :serial, force: :cascade do |t|
-    t.string "email", limit: 255, null: false
-    t.string "full_name", limit: 255, null: false
-    t.string "username", limit: 50, null: false
-    t.string "password", limit: 255, null: false
-    t.string "role", limit: 50
-
-    t.unique_constraint ["email"], name: "users_email_key"
-    t.unique_constraint ["password"], name: "users_password_key"
-    t.unique_constraint ["username"], name: "users_username_key"
+  create_table "users", force: :cascade do |t|
+    t.string "full_name"
+    t.string "email"
+    t.string "username"
+    t.string "password"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

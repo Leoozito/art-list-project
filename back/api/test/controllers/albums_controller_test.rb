@@ -17,7 +17,7 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create album" do
     assert_difference("Album.count") do
-      post albums_url, params: { album: { albumName: @album.albumName, artistAlbum: @album.artistAlbum, yearAlbum: @album.yearAlbum } }
+      post albums_url, params: { album: { artist: @album.artist, name_album: @album.name_album, year_album: @album.year_album } }
     end
 
     assert_redirected_to album_url(Album.last)
@@ -34,7 +34,7 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update album" do
-    patch album_url(@album), params: { album: { albumName: @album.albumName, artistAlbum: @album.artistAlbum, yearAlbum: @album.yearAlbum } }
+    patch album_url(@album), params: { album: { artist: @album.artist, name_album: @album.name_album, year_album: @album.year_album } }
     assert_redirected_to album_url(@album)
   end
 
