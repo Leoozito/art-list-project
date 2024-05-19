@@ -16,10 +16,11 @@ const Login = ({action}:any) => {
     async function handleSubmit(event: SyntheticEvent) {
         event.preventDefault()
 
-        const result = await signIn('credentials', {
+        const result = await signIn('credentials',
+        {
             email,
             password,
-            redirect: false
+            // redirect: false
         })
 
         if (result?.error) {
