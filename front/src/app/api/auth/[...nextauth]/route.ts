@@ -38,6 +38,7 @@ const nextAuthOptions: NextAuthOptions = {
 	pages: {
 		signIn: '/auth/sign-in'
 	},
+	
 	callbacks: {
 		async jwt({ token, user }) {
 			user && (token.user = user)
