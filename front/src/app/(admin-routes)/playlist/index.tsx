@@ -1,30 +1,19 @@
 "use client"
 
+import { getToken } from '../../functions/token-action'
+import { fetchWrapper } from '../../functions/fetch'
 import Button from "@/components/Button";
 import AlbumCard from "@/components/Card/AlbumCard";
 import CardLayout from "@/components/Card/CardLayout";
 import Modal from "@/components/Dialogues/Modal";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PiMusicNotesPlusFill } from "react-icons/pi";
 
 const Playlist = () => {
-
     const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState(false)
-    const [allAlbums, setAllAlbums] = useState([
-        {
-           nameArtist: 'Queen',
-           nameAlbum: 'Bohemia',
-           yearAlbum: '1982', 
-        },
-        {
-            nameArtist: 'AC/DC',
-            nameAlbum: 'Black',
-            yearAlbum: '1989', 
-        },
-    ])
-
+    const [allAlbums, setAllAlbums] = useState([])
     const [artist, setArtist] = useState([
         {
             name: 'Leo'
@@ -32,16 +21,55 @@ const Playlist = () => {
     ])
     const [nameAlbum, setNameAlbum] = useState("")
     const [yearAlbum, setYearAlbum] = useState("")
+    // const token = getToken();
+
+    const datasAlbums = {
+        album: {
+            name_album:nameAlbum,
+            artist: artist,
+            year_album: yearAlbum
+        }
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchWrapper('/albums', {
+                    method: 'GET',
+                });
+                setAllAlbums(data);
+            } catch (error) {
+                console.error('Error fetching albums:', error);
+            }
+        };
+
+        fetchData();
+    }, [])
 
     const SaveNewAlbum = () => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchWrapper('/albums/create', {
+                    method: 'POST',                       
+                    headers: {
+                        // 'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datasAlbums)
+                });
+            } catch (error) {
+                console.error('Error fetching albums:', error);
+            }
+        };
 
+        fetchData();
     }
 
     return(
         <CardLayout>
             <div className="p-10">
                 <div
-                    onClick={() => setOpenCardCreateAlbum(true)}
+                    onClick={() => setOpenCardCreateAlbum(!openCardCreateAlbum)}
                     className="cursor-pointer flex-col flex-grow mx-60 flex"
                 >
                     <label className="block text-sm font-medium leading-6 text-gray-900">Create new album</label>
@@ -57,12 +85,16 @@ const Playlist = () => {
                     </div>
                 </div>
                 <div className="mt-14 gap-12 grid grid-cols-3">
-                    {allAlbums.map((album:any) =>
+                    {allAlbums.map((album:any) =>                        
+                        {
+                        console.log("AAAAAAAAAA",album)
+                        return(
+                        
                         <AlbumCard
-                            artist={album.nameArtist}
-                            nameAlbum={album.nameAlbum}
-                            yearAlbum={album.yearAlbum}
-                        />
+                            artist={album.artist}
+                            nameAlbum={album.name_album}
+                            yearAlbum={album.year_album}
+                        />)}
                     )}
                 </div>
             </div>

@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-before_action :authorized
 
   def authorized
     user = User.find_by(email: params["user"][:email], password: params["user"][:password])
@@ -14,6 +13,6 @@ before_action :authorized
   private
 
   def generate_token(user)
-    JWT.encode({ user_id: user.id }, 'HJAas4d56asd45ads465a4s5d6HSG5SATY5uu23', 'HS256')
+    JWT.encode({ user_id: user.id }, 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.swLG_V3aYLyR4gOhaX8yX5xyD107Swm9thl4vJGBVCw', 'HS256')
   end
 end
