@@ -14,14 +14,9 @@ import { PiMusicNotesPlusFill } from "react-icons/pi";
 const Playlist = () => {
     const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState(false)
     const [allAlbums, setAllAlbums] = useState([])
-    const [artist, setArtist] = useState([
-        {
-            name: 'Leo'
-        }
-    ])
+    const [artist, setArtist] = useState([])
     const [nameAlbum, setNameAlbum] = useState("")
     const [yearAlbum, setYearAlbum] = useState("")
-    // const token = getToken();
 
     const datasAlbums = {
         album: {
@@ -32,6 +27,26 @@ const Playlist = () => {
     };
 
     useEffect(() => {
+        getAllAlbums();
+        getAllArtists();
+    }, [])
+
+    const getAllArtists = () => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchWrapper('/artists', {
+                    method: 'GET',
+                });
+                setArtist(data);
+            } catch (error) {
+                console.error('Error fetching artists: ', error);
+            }
+        };
+
+        fetchData();
+    }
+
+    const getAllAlbums = () => {
         const fetchData = async () => {
             try {
                 const data = await fetchWrapper('/albums', {
@@ -39,12 +54,12 @@ const Playlist = () => {
                 });
                 setAllAlbums(data);
             } catch (error) {
-                console.error('Error fetching albums:', error);
+                console.error('Error fetching albums: ', error);
             }
         };
 
         fetchData();
-    }, [])
+    }
 
     const SaveNewAlbum = () => {
         const fetchData = async () => {
@@ -52,13 +67,12 @@ const Playlist = () => {
                 const data = await fetchWrapper('/albums/create', {
                     method: 'POST',                       
                     headers: {
-                        // 'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(datasAlbums)
                 });
             } catch (error) {
-                console.error('Error fetching albums:', error);
+                console.error('Error when creating new album: ', error);
             }
         };
 
@@ -79,22 +93,17 @@ const Playlist = () => {
                         />
                         <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600">
                             <span>Click Here</span>
-                            <input id="file-upload" name="file-upload" type="file" className="sr-only"/>
                         </label>
                         <p className="pl-1">And create a new album by your favorite artist</p>
                     </div>
                 </div>
-                <div className="mt-14 gap-12 grid grid-cols-3">
+                <div className="mt-14 gap-12 grid sm:grid-cols-2 lg:grid-cols-3">
                     {allAlbums.map((album:any) =>                        
-                        {
-                        console.log("AAAAAAAAAA",album)
-                        return(
-                        
                         <AlbumCard
                             artist={album.artist}
                             nameAlbum={album.name_album}
                             yearAlbum={album.year_album}
-                        />)}
+                        />
                     )}
                 </div>
             </div>
@@ -116,7 +125,7 @@ const Playlist = () => {
 
                             <Select
                                 label="Artist of Album"
-                                items={artist.map(artist => artist.name)}             
+                                items={artist.map(artist => artist?.name)}             
                             />
 
                             <Input
