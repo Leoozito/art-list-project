@@ -9,3 +9,7 @@ export async function getToken() {
   const token = cookies().get("token");
   return token?.value;
 }
+
+export async function deleteToken() {
+  const token = cookies().delete("token");
+}

@@ -10,13 +10,21 @@ import Input from "@/components/Input";
 import Select from "@/components/Select";
 import { useEffect, useState } from "react";
 import { PiMusicNotesPlusFill } from "react-icons/pi";
+import Pagination from '@/components/Pagination'
 
-const Playlist = () => {
+type PageProps = {
+	searchParams?: {page?:string, limit?:string}
+}
+
+const Playlist = ({searchParams}:PageProps) => {
     const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState(false)
     const [allAlbums, setAllAlbums] = useState([])
     const [artist, setArtist] = useState([])
     const [nameAlbum, setNameAlbum] = useState("")
     const [yearAlbum, setYearAlbum] = useState("")
+    const [edit, setEdit] = useState(false)
+    const page = Number(searchParams?.page) || 1;
+    const limit = Number(searchParams?.limit) || 10;
 
     const datasAlbums = {
         album: {
@@ -25,6 +33,20 @@ const Playlist = () => {
             year_album: yearAlbum
         }
     };
+
+    const editAlbum = () => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchWrapper('/update', {
+                    method: 'PUT',
+                });
+            } catch (error) {
+                console.error('Error editing album: ', error);
+            }
+        };
+
+        fetchData();
+    }
 
     useEffect(() => {
         getAllAlbums();
@@ -37,9 +59,33 @@ const Playlist = () => {
                 const data = await fetchWrapper('/artists', {
                     method: 'GET',
                 });
-                setArtist(data);
+
+                for (let i = 0; i < data.json.length; i++) {
+                    setArtist(data.json[i][0].name)
+                }
+                console.log("LALALALALALOOLP: ",artist)
             } catch (error) {
                 console.error('Error fetching artists: ', error);
+            }
+        };
+
+        fetchData();
+    }
+
+    const getAlbumById = (id:any) => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchWrapper(`/albums/${id}`, {
+                    method: 'GET',
+                });
+                setArtist(data.artist)
+                setNameAlbum(data.name_album)
+                setYearAlbum(data.year_album)
+                setOpenCardCreateAlbum(!openCardCreateAlbum);
+                setEdit(true)
+                
+            } catch (error) {
+                console.error('Error fetching albums: ', error);
             }
         };
 
@@ -49,9 +95,10 @@ const Playlist = () => {
     const getAllAlbums = () => {
         const fetchData = async () => {
             try {
-                const data = await fetchWrapper('/albums', {
+                const {data, metadata} = await fetchWrapper('/albums', {
                     method: 'GET',
                 });
+                console.log(metadata)
                 setAllAlbums(data);
             } catch (error) {
                 console.error('Error fetching albums: ', error);
@@ -61,7 +108,7 @@ const Playlist = () => {
         fetchData();
     }
 
-    const SaveNewAlbum = () => {
+    const saveNewAlbum = () => {
         const fetchData = async () => {
             try {
                 const data = await fetchWrapper('/albums/create', {
@@ -98,13 +145,21 @@ const Playlist = () => {
                     </div>
                 </div>
                 <div className="mt-14 gap-12 grid sm:grid-cols-2 lg:grid-cols-3">
-                    {allAlbums.map((album:any) =>                        
+                    {allAlbums && (
+                        allAlbums.map((album:any) =>                        
                         <AlbumCard
+                            key={album.id}
+                            onClick={getAlbumById(album.id)}
                             artist={album.artist}
                             nameAlbum={album.name_album}
                             yearAlbum={album.year_album}
                         />
-                    )}
+                    ))}
+                    <Pagination
+                        page={page}
+                        limit={limit}
+                        total={2}
+                    />
                 </div>
             </div>
             {openCardCreateAlbum && (
@@ -114,7 +169,7 @@ const Playlist = () => {
                 >
                     <div className="mb-10 sm:mx-auto sm:w-full sm:max-w-sm">
                         <form 
-                            onSubmit={SaveNewAlbum} 
+                            onSubmit={edit ? editAlbum : saveNewAlbum} 
                             className='space-y-10'
                         >
                             <Input
@@ -125,7 +180,9 @@ const Playlist = () => {
 
                             <Select
                                 label="Artist of Album"
-                                items={artist.map(artist => artist?.name)}             
+                                items={artist && (artist.map((artist:any) => {
+                                    artist
+                                }))}         
                             />
 
                             <Input
@@ -135,7 +192,7 @@ const Playlist = () => {
                             />
 
                             <Button
-                                text="Save new album"
+                                text={edit ? 'Edit this album' : 'Save new album'}
                             />
                         </form>
                     </div>

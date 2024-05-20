@@ -4,16 +4,17 @@ import Image from "next/image";
 import Navbar from "../Navbar";
 import { signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation'
+import { deleteToken } from '../../app/functions/token-action'
 
 const SideBar = () => {
 	const router = useRouter()
 
 	async function logout() {
+        deleteToken()
 		await signOut({
 			redirect: false
 		})
-
-		router.replace('/')
+		router.replace('/auth/sign-in')
 	}
 
     return(

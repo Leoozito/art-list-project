@@ -6,8 +6,7 @@ export default function Home() {
   return (
     <>
       <SideBar/>
-      <main className="ml-72 mr-10 mt-32 flex flex-row justify-center items-center">
-          
+      <main className="md:ml-72 mr-10 mt-32 flex flex-row justify-center items-center">       
           <Playlist/>
       </main>
     </>

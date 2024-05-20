@@ -2,7 +2,9 @@
 
 import Button from '@/components/Button';
 import Input from '@/components/Input';
-import { useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
+import { useRouter } from "next/navigation";
+import { fetchWrapper } from '../../../functions/fetch'
 
 const SignUp = ({action}:any) => {
 
@@ -12,7 +14,40 @@ const SignUp = ({action}:any) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
-    // faltando username
+    const [username, setUsername] = useState("")
+
+    const router = useRouter()
+
+    const datasUser = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password,
+        username: username,
+    }
+
+    async function handleSubmit(event: SyntheticEvent) {
+        event.preventDefault()
+
+        const fetchData = async () => {
+            const response = await fetchWrapper('/auth/register', {
+                method: 'POST',                       
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datasUser)
+            });
+
+            fetchData();
+
+            if (response?.error) {
+                console.log(response)
+                return
+            }
+
+            router.replace('/playlist')
+        }
+    }
 
     return(
 
@@ -29,7 +64,7 @@ const SignUp = ({action}:any) => {
                     </div>
 
                     <div className="mb-10">
-                        <form onSubmit={action} className='my-10'>
+                        <form onSubmit={handleSubmit} className='my-10'>
                             
                             <div className="mt-10 grid grid-cols-1 gap-12 sm:grid-cols-6">
 
@@ -63,6 +98,16 @@ const SignUp = ({action}:any) => {
                                         placeholder="Enter your email: "
                                         type="text"
                                         label="Email"
+                                    />
+                                </div>
+                                <div className="sm:col-span-3">
+                                    <Input
+                                        required={true}
+                                        value={username}
+                                        onChange={(e:any) => setUsername(e.target.value)}
+                                        placeholder="Enter your first name: "
+                                        type="text"
+                                        label="Username"
                                     />
                                 </div> 
                                 <div className="sm:col-span-3">
