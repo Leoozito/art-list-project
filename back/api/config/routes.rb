@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   get "albums", to: "albums#index"
   get "albums/:id", to: "albums#show"
+  post "albums/create", to:"albums#create"
 
   post '/login', to: 'users#login'
 end
