@@ -28,7 +28,7 @@ const Login = ({action}:any) => {
             return
         }
   
-        router.replace('/')
+        router.replace('/playlist')
     }
 
     return(
