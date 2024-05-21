@@ -11,6 +11,9 @@ import Select from "@/components/Select";
 import { useEffect, useState } from "react";
 import { PiMusicNotesPlusFill } from "react-icons/pi";
 import Pagination from '@/components/Pagination'
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
 type PageProps = {
 	searchParams?: {page?:string, limit?:string}
@@ -38,6 +41,18 @@ const Playlist = ({searchParams}:PageProps) => {
             user_id : userId
         }
     };
+
+    // part of validations
+    const schema = z.object({
+        nameAlbum: z.string()
+        .nonempty("Campo obrigatório!"),
+        yearAlbum: z.string()
+        .nonempty("Campo obrigatório!")
+    })
+
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+        resolver: zodResolver(schema)
+    });
 
     const deleteAlbumById = (id:any) => {
         const fetchData = async () => {
@@ -210,27 +225,27 @@ const Playlist = ({searchParams}:PageProps) => {
                 >
                     <div className="mb-10 sm:mx-auto sm:w-full sm:max-w-sm">
                         <form 
-                            onSubmit={edit ? editAlbum : saveNewAlbum} 
+                            onSubmit={edit ? handleSubmit(editAlbum) : handleSubmit(saveNewAlbum)} 
                             className='space-y-10'
                         >
                             <Input
                                 label="Name of Album"
                                 value={nameAlbum}
-                                onChange={(e:any) => setNameAlbum(e.target.value)}
+                                {...register("nameAlbum")}
                             />
+                            {errors.firstName && <span className="message-error">{errors?.nameAlbum?.message?.toString()}</span>}
 
                             <Select
                                 label="Artist of Album"
-                                items={artist && (artist.map((artist:any) => {
-                                    artist
-                                }))}         
+                                items={artist}         
                             />
 
                             <Input
                                 label="Year of Album"
                                 value={yearAlbum}
-                                onChange={(e:any) => setYearAlbum(e.target.value)}
+                                {...register("yearAlbum")}
                             />
+                            {errors.firstName && <span className="message-error">{errors?.yearAlbum?.message?.toString()}</span>}
 
                             <Button
                                 text={edit ? 'Edit this album' : 'Save new album'}
