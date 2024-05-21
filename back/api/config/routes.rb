@@ -9,9 +9,13 @@ Rails.application.routes.draw do
 
   get "albums", to: "albums#index"
   get "albums/:id", to: "albums#show"
-
   post "albums/create", to:"albums#create"
+
+  delete '/delete/:id', to: 'albums#destroy'
+  put '/update/:id', to: 'albums#update'
+
   post '/login', to: 'users#login'
+  post '/auth/register', to: 'users#create'
 
   get "artists", to: "artists#index"
 

@@ -5,6 +5,8 @@ import Input from '@/components/Input';
 import { SyntheticEvent, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { fetchWrapper } from '../../../functions/fetch'
+import { RiAdminLine } from "react-icons/ri";
+import { FaRegUser } from "react-icons/fa";
 
 const SignUp = ({action}:any) => {
 
@@ -15,6 +17,7 @@ const SignUp = ({action}:any) => {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [username, setUsername] = useState("")
+    const [role, setRole] = useState("user")
 
     const router = useRouter()
 
@@ -59,8 +62,20 @@ const SignUp = ({action}:any) => {
                         <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
                     </div>
 
-                    <div className='ring-yellow-600 ring-1 bg-yellow-600/60 w-full rounded-md py-2.5 text-[#ffffff] justify-center flex items-center font-extrabold sm:text-2xl uppercase'>
-                        <h1>User</h1>
+                    <div className='w-full rounded-md py-2.5 justify-center flex items-center'>
+                        <button 
+                            onClick={() => setRole("user")} type="button" className={`inline-flex items-center px-8 py-4 text-xl font-extrabold text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700 ${role === 'user' ? 'text-white bg-gray-900' : 'text-gray-900 bg-transparent'}`}
+                        >
+                            <FaRegUser className="mr-2"/>
+                            User
+                        </button>
+                        <button 
+                            onClick={() => setRole("admin")} type="button" className={`inline-flex items-center px-8 py-4 text-xl font-extrabold text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700 ${role === 'admin' ? 'text-white bg-gray-900' : 'text-gray-900 bg-transparent'}`}
+                        >
+                            <RiAdminLine className="mr-2 text-2xl"/>
+                            Administrator
+                        </button>
+
                     </div>
 
                     <div className="mb-10">

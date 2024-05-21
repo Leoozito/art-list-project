@@ -1,7 +1,9 @@
 import CardLayout from "../CardLayout";
 import { PiMusicNotesFill } from "react-icons/pi";
+import { MdOutlineDeleteForever } from "react-icons/md";
 
-const AlbumCard = ({key,onClick, artist, nameAlbum, yearAlbum}:any) => {
+const AlbumCard = ({isAdm, key,onClick, artist, nameAlbum, yearAlbum}:any) => {
+
     return(
         <>
             <CardLayout
@@ -16,6 +18,12 @@ const AlbumCard = ({key,onClick, artist, nameAlbum, yearAlbum}:any) => {
                         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Artist: {artist}</p>
                         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Year of release: {yearAlbum}</p>
                     </div>
+                    {isAdm && (
+                        <MdOutlineDeleteForever 
+                            
+                            className="text-3xl text-red-700 text-center font-extrabold mr-8"
+                        />
+                    )}
                 </div>
             </CardLayout>
         </>
