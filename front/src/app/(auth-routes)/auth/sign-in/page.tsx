@@ -65,7 +65,7 @@ const Login = ({action}:any) => {
                                         text="Log In"
                                     />
                                     <p className="text-lg font-semibold text-gray-900">Don't have an account with us yet?</p>
-                                    <p className="text-lg font-semibold text-indigo-600">Click here and register</p>
+                                    <p className="text-lg font-semibold text-indigo-600 cursor-pointer" onClick={() => router.replace('/auth/sign-up')}>Click here and register</p>
                                 </form>
                             </div>
                         </div>

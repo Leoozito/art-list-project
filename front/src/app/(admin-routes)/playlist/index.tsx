@@ -1,6 +1,6 @@
 "use client"
 
-import { getToken } from '../../functions/token-action'
+import { getDataCookie } from '../../functions/token-action'
 import { fetchWrapper } from '../../functions/fetch'
 import Button from "@/components/Button";
 import AlbumCard from "@/components/Card/AlbumCard";
@@ -22,7 +22,11 @@ const Playlist = ({searchParams}:PageProps) => {
     const [artist, setArtist] = useState([])
     const [nameAlbum, setNameAlbum] = useState("")
     const [yearAlbum, setYearAlbum] = useState("")
+    const [userId, setUserId] = useState<any>()
+
     const [edit, setEdit] = useState(false)
+    const [userIsAdm, setUserIsAdm] = useState(false)
+
     const page = Number(searchParams?.page) || 1;
     const limit = Number(searchParams?.limit) || 10;
 
@@ -30,16 +34,34 @@ const Playlist = ({searchParams}:PageProps) => {
         album: {
             name_album:nameAlbum,
             artist: artist,
-            year_album: yearAlbum
+            year_album: yearAlbum,
+            user_id : userId
         }
     };
 
-    const editAlbum = () => {
+    const deleteAlbumById = (id:any) => {
         const fetchData = async () => {
             try {
-                const data = await fetchWrapper('/update', {
+                const data = await fetchWrapper(`/delete/${id}`, {
+                    method: 'DELETE',
+                });
+
+            } catch (error) {
+                console.error('Error delete album: ', error);
+            }
+        };
+
+        fetchData();
+    }
+
+
+    const editAlbum = (id:any) => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchWrapper(`/update/${id}`, {
                     method: 'PUT',
                 });
+
             } catch (error) {
                 console.error('Error editing album: ', error);
             }
@@ -48,7 +70,20 @@ const Playlist = ({searchParams}:PageProps) => {
         fetchData();
     }
 
+    const typeUser = async () => {
+        const role_user = await getDataCookie('role')
+        const id_user = await getDataCookie("id")
+        setUserId(id_user)
+
+        if (role_user == "admin") {
+            setUserIsAdm(true)
+        } else {
+            setUserIsAdm(false)
+        }
+    }
+
     useEffect(() => {
+        typeUser()
         getAllAlbums();
         getAllArtists();
     }, [])
@@ -58,12 +93,16 @@ const Playlist = ({searchParams}:PageProps) => {
             try {
                 const data = await fetchWrapper('/artists', {
                     method: 'GET',
-                });
+                })
 
                 for (let i = 0; i < data.json.length; i++) {
-                    setArtist(data.json[i][0].name)
+                    for (let j = 0; j < data.json[i].length; j++) {
+                        setArtist(data.json[i][j].name)
+                        console.log(data.json[i][j].name)
+                    }
                 }
-                console.log("LALALALALALOOLP: ",artist)
+
+                console.log('ALOOO',artist)
             } catch (error) {
                 console.error('Error fetching artists: ', error);
             }
@@ -95,11 +134,11 @@ const Playlist = ({searchParams}:PageProps) => {
     const getAllAlbums = () => {
         const fetchData = async () => {
             try {
-                const {data, metadata} = await fetchWrapper('/albums', {
+                const { data } = await fetchWrapper('/albums', {
                     method: 'GET',
                 });
-                console.log(metadata)
-                setAllAlbums(data);
+                console.log("LISTA ALBUMS" , data)
+                setAllAlbums(data.albums);
             } catch (error) {
                 console.error('Error fetching albums: ', error);
             }
@@ -148,7 +187,9 @@ const Playlist = ({searchParams}:PageProps) => {
                     {allAlbums && (
                         allAlbums.map((album:any) =>                        
                         <AlbumCard
+                            isAdm={userIsAdm}
                             key={album.id}
+                            onDelete={() => deleteAlbumById(album.id)}
                             onClick={getAlbumById(album.id)}
                             artist={album.artist}
                             nameAlbum={album.name_album}
