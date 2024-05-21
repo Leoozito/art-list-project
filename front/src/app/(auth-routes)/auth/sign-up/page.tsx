@@ -2,13 +2,16 @@
 
 import Button from '@/components/Button';
 import Input from '@/components/Input';
-import { SyntheticEvent, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from "next/navigation";
 import { fetchWrapper } from '../../../functions/fetch'
 import { RiAdminLine } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
-const SignUp = ({action}:any) => {
+const SignUp = () => {
 
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
@@ -22,15 +25,39 @@ const SignUp = ({action}:any) => {
     const router = useRouter()
 
     const datasUser = {
-        firstName: firstName,
-        lastName: lastName,
+        full_name: `${firstName} ${lastName}`,
         email: email,
         password: password,
         username: username,
+        role: role
     }
 
-    async function handleSubmit(event: SyntheticEvent) {
-        event.preventDefault()
+    const schema = z.object({
+        firstName: z.string()
+        .nonempty("This field is required"),
+        lastName: z.string()
+        .nonempty("This field is required"),
+        
+        username: z.string()
+        .nonempty("This field is required")
+        .regex(/^[A-Za-z]+$/i, "Only letters are allowed"),
+        email: z.string()
+        .nonempty("This field is required")
+        .email("Invalid email format"),
+
+        password: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
+        confirmPassword: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
+    })
+    .refine(({ password, confirmPassword}) => password === confirmPassword, {
+        message: "A confirmação de senha não corresponde",
+        path: ["confirm_password"]
+    });
+
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+        resolver: zodResolver(schema)
+    });
+
+    async function registerUser() {
 
         const fetchData = async () => {
             const response = await fetchWrapper('/auth/register', {
@@ -79,7 +106,7 @@ const SignUp = ({action}:any) => {
                     </div>
 
                     <div className="mb-10">
-                        <form onSubmit={handleSubmit} className='my-10'>
+                        <form onSubmit={handleSubmit(registerUser)} className='my-10'>
                             
                             <div className="mt-10 grid grid-cols-1 gap-12 sm:grid-cols-6">
 
@@ -87,21 +114,25 @@ const SignUp = ({action}:any) => {
                                     <Input
                                         required={true}
                                         value={firstName}
-                                        onChange={(e:any) => setFirstName(e.target.value)}
                                         placeholder="Enter your first name: "
                                         type="text"
                                         label="First Name"
+                                        {...register("firstName")}
                                     />
+                                    {errors.firstName && <span className="message-error">{errors?.firstName?.message?.toString()}</span>}
+
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
                                         required={true}
                                         value={lastName}
-                                        onChange={(e:any) => setLastName(e.target.value)}
+                                        {...register("lastName")}
                                         placeholder="Enter your last name: "
                                         type="text"
                                         label="Last Name"
                                     />
+                                    {errors.lastName && <span className="message-error">{errors?.lastName?.message?.toString()}</span>}
+
                                 </div>
                             </div>
                             <div className='border-t border-gray-900/10 pt-12 mt-10 grid grid-cols-1 gap-12 sm:grid-cols-6'>
@@ -109,41 +140,49 @@ const SignUp = ({action}:any) => {
                                     <Input
                                         required={true}
                                         value={email}
-                                        onChange={(e:any) => setEmail(e.target.value)}
+                                        {...register("email")}
                                         placeholder="Enter your email: "
                                         type="text"
                                         label="Email"
                                     />
+                                    {errors.email && <span className="message-error">{errors?.email?.message?.toString()}</span>}
+
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
                                         required={true}
                                         value={username}
-                                        onChange={(e:any) => setUsername(e.target.value)}
+                                        {...register("username")}
                                         placeholder="Enter your first name: "
                                         type="text"
                                         label="Username"
                                     />
+                                    {errors.username && <span className="message-error">{errors?.username?.message?.toString()}</span>}
+
                                 </div> 
                                 <div className="sm:col-span-3">
                                     <Input
                                         required={true}
                                         value={password}
-                                        onChange={(e:any) => setPassword(e.target.value)}
+                                        {...register("password")}
                                         placeholder="Enter a password for your account: "
                                         type="text"
                                         label="Password"
                                     />
+                                    {errors.password && <span className="message-error">{errors?.password?.message?.toString()}</span>}
+
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
                                         required={true}
                                         value={confirmPassword}
-                                        onChange={(e:any) => setConfirmPassword(e.target.value)}
+                                        {...register("confirmPassword")}
                                         placeholder="Confirm your password: "
                                         type="text"
                                         label="Confirm Password"
                                     />
+                                    {errors.confirmPassword && <span className="message-error">{errors?.confirmPassword?.message?.toString()}</span>}
+
                                 </div>
                             </div>
                             <div className="mt-10">

@@ -82,6 +82,6 @@ class UsersController < ApplicationController
     end
 
     def encode_token(payload)
-      JWT.encode(payload, 'HJAas4d56asd45ads465a4s5d6HSG5SATY5uu23')
+      JWT.encode(payload, 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.swLG_V3aYLyR4gOhaX8yX5xyD107Swm9thl4vJGBVCw')
     end
 end
