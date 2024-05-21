@@ -4,7 +4,8 @@ class AlbumsController < ApplicationController
 
   # GET /albums or /albums.json
   def index
-    @albums = Album.page(params[:page]).per(params[:limit] || 10)
+    user_id = params[:user_id]
+    @albums = Album.where(user_id: user_id).page(params[:page]).per(params[:limit] || 10)
     render json: {
       albums: @albums,
       metadata: {
@@ -14,7 +15,7 @@ class AlbumsController < ApplicationController
         total_count: @albums.total_count
       }
     }
-  end
+  end  
 
   # GET /albums/1 or /albums/1.json
   def show

@@ -20,13 +20,14 @@ class UsersController < ApplicationController
       render json: {
         status: :created,
         logged_in: true,
-        user: user,
+        user: user.as_json(only: [:id, :email, :name, :full_name, :username, :role, :created_at, :updated_at]),
         token: token
       }
     else
       render json: { status: 401 }
     end
-  end 
+  end
+   
 
   # GET /users/new
   def new
