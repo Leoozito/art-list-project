@@ -34,8 +34,9 @@ const Login = ({action}:any) => {
         {
             email,
             password,
-            // redirect: false
+            redirect: false
         })
+        console.log(result)
 
         if (result?.error) {
             console.log(result)

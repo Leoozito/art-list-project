@@ -13,36 +13,32 @@ import * as z from 'zod';
 
 const SignUp = () => {
 
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
+    // const [firstName, setFirstName] = useState("")
+    // const [lastName, setLastName] = useState("")
 
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-    const [username, setUsername] = useState("")
+    // const [email, setEmail] = useState("")
+    // const [password, setPassword] = useState("")
+    // const [confirmPassword, setConfirmPassword] = useState("")
+    // const [username, setUsername] = useState("")
     const [role, setRole] = useState("user")
 
     const router = useRouter()
 
-    const datasUser = {
-        full_name: `${firstName} ${lastName}`,
-        email: email,
-        password: password,
-        username: username,
-        role: role
-    }
+    // const datasUser = {
+    //     full_name: `${firstName} ${lastName}`,
+    //     email: email,
+    //     password: password,
+    //     username: username,
+    //     role: role
+    // }
 
     const schema = z.object({
-        firstName: z.string()
-        .nonempty("This field is required"),
-        lastName: z.string()
-        .nonempty("This field is required"),
+        firstName: z.string({message: "This fields is required"}),
+        lastName: z.string({message: "This fields is required"}),
         
-        username: z.string()
-        .nonempty("This field is required")
+        username: z.string({message:"This field is required"})
         .regex(/^[A-Za-z]+$/i, "Only letters are allowed"),
-        email: z.string()
-        .nonempty("This field is required")
+        email: z.string({message:"This field is required"})
         .email("Invalid email format"),
 
         password: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
@@ -53,19 +49,21 @@ const SignUp = () => {
         path: ["confirm_password"]
     });
 
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+    type createUserFormData = z.infer<typeof schema>
+
+    const { register, handleSubmit, formState: { errors }, watch } = useForm<createUserFormData>({
         resolver: zodResolver(schema)
     });
 
-    async function registerUser() {
-
+    function registerUser(data:any) {
+        // console.log("ALOOO",data)
         const fetchData = async () => {
             const response = await fetchWrapper('/auth/register', {
                 method: 'POST',                       
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(datasUser)
+                // body: JSON.stringify(datasUser)
             });
 
             fetchData();
@@ -91,13 +89,13 @@ const SignUp = () => {
 
                     <div className='w-full rounded-md py-2.5 justify-center flex items-center'>
                         <button 
-                            onClick={() => setRole("user")} type="button" className={`inline-flex items-center px-8 py-4 text-xl font-extrabold text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700 ${role === 'user' ? 'text-white bg-gray-900' : 'text-gray-900 bg-transparent'}`}
+                            onClick={() => setRole("user")} type="button" className={`inline-flex items-center px-8 py-4 text-xl font-extrabold text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ${role === 'user' ? 'text-white bg-gray-900' : 'text-gray-900 bg-[#ffffff]'}`}
                         >
                             <FaRegUser className="mr-2"/>
                             User
                         </button>
                         <button 
-                            onClick={() => setRole("admin")} type="button" className={`inline-flex items-center px-8 py-4 text-xl font-extrabold text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700 ${role === 'admin' ? 'text-white bg-gray-900' : 'text-gray-900 bg-transparent'}`}
+                            onClick={() => setRole("admin")} type="button" className={`inline-flex items-center px-8 py-4 text-xl font-extrabold text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ${role === 'admin' ? 'text-white bg-gray-900' : 'text-gray-900 bg-[#ffffff]'}`}
                         >
                             <RiAdminLine className="mr-2 text-2xl"/>
                             Administrator
@@ -112,77 +110,64 @@ const SignUp = () => {
 
                                 <div className="sm:col-span-3">
                                     <Input
-                                        required={true}
-                                        value={firstName}
                                         placeholder="Enter your first name: "
                                         type="text"
                                         label="First Name"
                                         {...register("firstName")}
+                                        error={errors.firstName}
                                     />
-                                    {errors.firstName && <span className="message-error">{errors?.firstName?.message?.toString()}</span>}
 
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
-                                        required={true}
-                                        value={lastName}
                                         {...register("lastName")}
                                         placeholder="Enter your last name: "
                                         type="text"
                                         label="Last Name"
+                                        error={errors.lastName}
                                     />
-                                    {errors.lastName && <span className="message-error">{errors?.lastName?.message?.toString()}</span>}
-
                                 </div>
                             </div>
                             <div className='border-t border-gray-900/10 pt-12 mt-10 grid grid-cols-1 gap-12 sm:grid-cols-6'>
                                 <div className="sm:col-span-3">
                                     <Input
-                                        required={true}
-                                        value={email}
+                                        // required={true}
                                         {...register("email")}
                                         placeholder="Enter your email: "
                                         type="text"
                                         label="Email"
+                                        error={errors.email}
                                     />
-                                    {errors.email && <span className="message-error">{errors?.email?.message?.toString()}</span>}
-
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
-                                        required={true}
-                                        value={username}
+                                        // required={true}
                                         {...register("username")}
                                         placeholder="Enter your first name: "
                                         type="text"
                                         label="Username"
+                                        error={errors.username}
                                     />
-                                    {errors.username && <span className="message-error">{errors?.username?.message?.toString()}</span>}
-
                                 </div> 
                                 <div className="sm:col-span-3">
                                     <Input
-                                        required={true}
-                                        value={password}
+                                        // required={true}
                                         {...register("password")}
                                         placeholder="Enter a password for your account: "
                                         type="text"
                                         label="Password"
+                                        error={errors.password}
                                     />
-                                    {errors.password && <span className="message-error">{errors?.password?.message?.toString()}</span>}
-
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
-                                        required={true}
-                                        value={confirmPassword}
+                                        // required={true}
                                         {...register("confirmPassword")}
                                         placeholder="Confirm your password: "
                                         type="text"
                                         label="Confirm Password"
+                                        error={errors.confirmPassword}
                                     />
-                                    {errors.confirmPassword && <span className="message-error">{errors?.confirmPassword?.message?.toString()}</span>}
-
                                 </div>
                             </div>
                             <div className="mt-10">
