@@ -1,8 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
-const API_URL = "http://localhost:3000"
-
 const nextAuthOptions: NextAuthOptions = {
 
 	providers: [
@@ -14,7 +12,7 @@ const nextAuthOptions: NextAuthOptions = {
 			},
 
 			async authorize(credentials, req) {
-				const response = await fetch(`${API_URL}/login`, {
+				const response = await fetch(`${process.env.NEXT_PUBLIC_ROUTE_API}/login`, {
 					method: 'POST',
 					headers: {
 						'Content-type': 'application/json'
@@ -24,6 +22,7 @@ const nextAuthOptions: NextAuthOptions = {
 						password: credentials?.password
 					})
 				})
+				console.log(response.json())
 
 				const user = await response.json()
 

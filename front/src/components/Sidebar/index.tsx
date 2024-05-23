@@ -12,7 +12,7 @@ const SideBar = () => {
 	async function logout() {
         deleteToken()
 		await signOut({
-			// redirect: false
+			redirect: false
 		})
 		router.replace('/auth/sign-in')
 	}

@@ -1,6 +1,6 @@
 import Modal from "../Modal";
 
-const AlertDialog = () => {
+const AlertDialog = ({title, conteudo, openModal, icon, iconColor, onClose}:any) => {
     return (
         <>
             <Modal>

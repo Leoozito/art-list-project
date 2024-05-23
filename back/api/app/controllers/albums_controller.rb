@@ -7,7 +7,7 @@ class AlbumsController < ApplicationController
     user_id = params[:user_id]
     @albums = Album.where(user_id: user_id).page(params[:page]).per(params[:limit] || 10)
     render json: {
-      albums: @albums,
+      albums: @albums.map { |album| album.serializable_hash },
       metadata: {
         page: @albums.current_page,
         limit: @albums.limit_value,
