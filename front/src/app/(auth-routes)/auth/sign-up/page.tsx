@@ -26,8 +26,6 @@ const SignUp = () => {
 
     const [role, setRole] = useState("user")
 
-    console.log(formState, "client");
-
     return(
 
         <>
@@ -69,13 +67,8 @@ const SignUp = () => {
                                         id="firstName"
                                         name="firstName"
                                         type="firstName"
+                                        error={formState?.zodErrors?.firstName}
                                     />
-                                    {formState?.zodErrors?.firstName &&
-                                        <span className="">
-                                            {formState?.zodErrors?.firstName}
-                                        </span>
-                                    }
-
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
@@ -84,12 +77,8 @@ const SignUp = () => {
                                         id="lastName"
                                         name="lastName"
                                         type="lastName"
+                                        error={formState?.zodErrors?.lastName}
                                     />
-                                    {formState?.zodErrors?.lastName &&
-                                        <span className="">
-                                            {formState?.zodErrors?.lastName}
-                                        </span>
-                                    }
                                 </div>
                             </div>
                             <div className='border-t border-gray-900/10 pt-12 mt-10 grid grid-cols-1 gap-12 sm:grid-cols-6'>
@@ -100,12 +89,8 @@ const SignUp = () => {
                                         id="email"
                                         name="email"
                                         type="email"
+                                        error={formState?.zodErrors?.email}
                                     />
-                                    {formState?.zodErrors?.email &&
-                                        <span className="">
-                                            {formState?.zodErrors?.email}
-                                        </span>
-                                    }
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
@@ -114,12 +99,8 @@ const SignUp = () => {
                                         id="username"
                                         name="username"
                                         type="username"
+                                        error={formState?.zodErrors?.username}
                                     />
-                                    {formState?.zodErrors?.username &&
-                                        <span className="">
-                                            {formState?.zodErrors?.username}
-                                        </span>
-                                    }
                                 </div> 
                                 <div className="sm:col-span-3">
                                     <Input
@@ -128,12 +109,8 @@ const SignUp = () => {
                                         id="password"
                                         name="password"
                                         type="password"
+                                        error={formState?.zodErrors?.password}
                                     />
-                                    {formState?.zodErrors?.password &&
-                                        <span className="">
-                                            {formState?.zodErrors?.password}
-                                        </span>
-                                    }
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
@@ -142,12 +119,8 @@ const SignUp = () => {
                                         id="confirmPassword"
                                         name="confirmPassword"
                                         type="confirmPassword"
+                                        error={formState?.zodErrors?.confirmPassword}
                                     />
-                                    {formState?.zodErrors?.confirmPassword &&
-                                        <span className="">
-                                            {formState?.zodErrors?.confirmPassword}
-                                        </span>
-                                    }
                                 </div>
                             </div>
                             <div className="mt-10">
