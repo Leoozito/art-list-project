@@ -5,46 +5,29 @@ import Input from '@/components/Input';
 import CardLayout from '@/components/Card/CardLayout';
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { useFormState } from "react-dom";
+import { loginUserAction } from '@/data/actions/authentication/sign-in-actions';
+
+const INITIAL_STATE = {
+    data: null,
+    zodErrors: null,
+    message: null,
+};
 
 const Login = ({action}:any) => {
-    
-    const [password, setPassword] = useState("")
-    const [email, setEmail] = useState("")
+
     const router = useRouter()
 
-    const schema = z.object({
-        email: z.string()
-        .nonempty("Campo obrigatório!")
-        .email("Invalid email format"),
+    const [formState, formAction] = useFormState(
+        loginUserAction,
+        INITIAL_STATE
+    );
 
-        senha: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
-    })
-
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
-        resolver: zodResolver(schema)
-    });
-
-    async function login() {
-
-        const result = await signIn('credentials',
-        {
-            email,
-            password,
-            redirect: false
-        })
-        console.log(result)
-
-        if (result?.error) {
-            console.log(result)
-            return
-        }
-  
-        router.replace('/playlist')
-    }
+    // const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+    //     resolver: zodResolver(schema)
+    // });
 
     return(
 
@@ -59,25 +42,36 @@ const Login = ({action}:any) => {
                                 <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
                             </div>
                             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                                <form onSubmit={handleSubmit(login)} className='my-10 space-y-6'>
+                                <form 
+                                    action={formAction}
+                                    className='my-10 space-y-6'
+                                >
                                     <Input
                                         required={true}
-                                        value={email}
-                                        {...register("email")}
                                         placeholder="Enter your email: "
-                                        type="text"
                                         label="Email"
+                                        id="email"
+                                        name="email"
+                                        type="email"
                                     />
-                                    {errors.email && <span className="message-error">{errors?.email?.message?.toString()}</span>}
+                                    {formState?.zodErrors?.email &&
+                                        <span className="">
+                                            {formState?.zodErrors?.email?.err}
+                                        </span>
+                                    }
                                     <Input
                                         required={true}
-                                        value={password}
-                                        {...register("password")}
                                         placeholder="Enter your password: "
-                                        type="text"
                                         label="Password"
+                                        id="password"
+                                        name="password"
+                                        type="password"
                                     />
-                                    {errors.password && <span className="message-error">{errors?.password?.message?.toString()}</span>}
+                                    {formState?.zodErrors?.password &&
+                                        <span className="">
+                                            {formState?.zodErrors?.password?.err}
+                                        </span>
+                                    }
                                     <Button 
                                         text="Log In"
                                     />

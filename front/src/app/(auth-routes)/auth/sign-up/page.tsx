@@ -3,79 +3,30 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import { useState } from 'react';
-import { useRouter } from "next/navigation";
-import { fetchWrapper } from '../../../functions/fetch'
 import { RiAdminLine } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { registerUserAction } from '@/data/actions/authentication/sign-up-actions';
+import { useFormState } from "react-dom";
+
+const INITIAL_STATE = {
+    data: null,
+    zodErrors: null,
+    message: null,
+};
 
 const SignUp = () => {
+    
+    const [formState, formAction] = useFormState(
+        registerUserAction,
+        INITIAL_STATE
+    );
 
-    // const [firstName, setFirstName] = useState("")
-    // const [lastName, setLastName] = useState("")
-
-    // const [email, setEmail] = useState("")
-    // const [password, setPassword] = useState("")
-    // const [confirmPassword, setConfirmPassword] = useState("")
-    // const [username, setUsername] = useState("")
     const [role, setRole] = useState("user")
 
-    const router = useRouter()
-
-    // const datasUser = {
-    //     full_name: `${firstName} ${lastName}`,
-    //     email: email,
-    //     password: password,
-    //     username: username,
-    //     role: role
-    // }
-
-    const schema = z.object({
-        firstName: z.string({message: "This fields is required"}),
-        lastName: z.string({message: "This fields is required"}),
-        
-        username: z.string({message:"This field is required"})
-        .regex(/^[A-Za-z]+$/i, "Only letters are allowed"),
-        email: z.string({message:"This field is required"})
-        .email("Invalid email format"),
-
-        password: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
-        confirmPassword: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
-    })
-    .refine(({ password, confirmPassword}) => password === confirmPassword, {
-        message: "A confirmação de senha não corresponde",
-        path: ["confirm_password"]
-    });
-
-    type createUserFormData = z.infer<typeof schema>
-
-    const { register, handleSubmit, formState: { errors }, watch } = useForm<createUserFormData>({
-        resolver: zodResolver(schema)
-    });
-
-    function registerUser(data:any) {
-        // console.log("ALOOO",data)
-        const fetchData = async () => {
-            const response = await fetchWrapper('/auth/register', {
-                method: 'POST',                       
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                // body: JSON.stringify(datasUser)
-            });
-
-            fetchData();
-
-            if (response?.error) {
-                console.log(response)
-                return
-            }
-
-            router.replace('/playlist')
-        }
-    }
+    console.log(formState, "client");
 
     return(
 
@@ -104,70 +55,99 @@ const SignUp = () => {
                     </div>
 
                     <div className="mb-10">
-                        <form onSubmit={handleSubmit(registerUser)} className='my-10'>
+                        <form 
+                            action={formAction}
+                            className='my-10'
+                        >
                             
                             <div className="mt-10 grid grid-cols-1 gap-12 sm:grid-cols-6">
 
                                 <div className="sm:col-span-3">
                                     <Input
                                         placeholder="Enter your first name: "
-                                        type="text"
                                         label="First Name"
-                                        {...register("firstName")}
-                                        error={errors.firstName}
+                                        id="firstName"
+                                        name="firstName"
+                                        type="firstName"
                                     />
+                                    {formState?.zodErrors?.firstName &&
+                                        <span className="">
+                                            {formState?.zodErrors?.firstName}
+                                        </span>
+                                    }
 
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
-                                        {...register("lastName")}
                                         placeholder="Enter your last name: "
-                                        type="text"
                                         label="Last Name"
-                                        error={errors.lastName}
+                                        id="lastName"
+                                        name="lastName"
+                                        type="lastName"
                                     />
+                                    {formState?.zodErrors?.lastName &&
+                                        <span className="">
+                                            {formState?.zodErrors?.lastName}
+                                        </span>
+                                    }
                                 </div>
                             </div>
                             <div className='border-t border-gray-900/10 pt-12 mt-10 grid grid-cols-1 gap-12 sm:grid-cols-6'>
                                 <div className="sm:col-span-3">
                                     <Input
-                                        // required={true}
-                                        {...register("email")}
                                         placeholder="Enter your email: "
-                                        type="text"
                                         label="Email"
-                                        error={errors.email}
+                                        id="email"
+                                        name="email"
+                                        type="email"
                                     />
+                                    {formState?.zodErrors?.email &&
+                                        <span className="">
+                                            {formState?.zodErrors?.email}
+                                        </span>
+                                    }
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
-                                        // required={true}
-                                        {...register("username")}
                                         placeholder="Enter your first name: "
-                                        type="text"
                                         label="Username"
-                                        error={errors.username}
+                                        id="username"
+                                        name="username"
+                                        type="username"
                                     />
+                                    {formState?.zodErrors?.username &&
+                                        <span className="">
+                                            {formState?.zodErrors?.username}
+                                        </span>
+                                    }
                                 </div> 
                                 <div className="sm:col-span-3">
                                     <Input
-                                        // required={true}
-                                        {...register("password")}
                                         placeholder="Enter a password for your account: "
-                                        type="text"
                                         label="Password"
-                                        error={errors.password}
+                                        id="password"
+                                        name="password"
+                                        type="password"
                                     />
+                                    {formState?.zodErrors?.password &&
+                                        <span className="">
+                                            {formState?.zodErrors?.password}
+                                        </span>
+                                    }
                                 </div>
                                 <div className="sm:col-span-3">
                                     <Input
-                                        // required={true}
-                                        {...register("confirmPassword")}
                                         placeholder="Confirm your password: "
-                                        type="text"
                                         label="Confirm Password"
-                                        error={errors.confirmPassword}
+                                        id="confirmPassword"
+                                        name="confirmPassword"
+                                        type="confirmPassword"
                                     />
+                                    {formState?.zodErrors?.confirmPassword &&
+                                        <span className="">
+                                            {formState?.zodErrors?.confirmPassword}
+                                        </span>
+                                    }
                                 </div>
                             </div>
                             <div className="mt-10">
