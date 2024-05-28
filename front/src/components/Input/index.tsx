@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 
 const Input = ({label, type, name, error, ...rest }:any ) => {
+    console.log(error)
+
     return(
         <>
             <div className="flex-col w-full">
@@ -15,7 +17,7 @@ const Input = ({label, type, name, error, ...rest }:any ) => {
                     name={name}
                     className={`w-full rounded-md border-0 py-4 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-lg sm:leading-6`}
                 />
-                {error && (<span>{error.message}</span>)}
+                {error && (<span className="p-1 text-red-600 text-md">{error}</span>)}
             </div>
         </>
     )

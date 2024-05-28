@@ -6,27 +6,25 @@ import { redirect } from "next/navigation";
 
 const signUpSchema = z.object({
     firstName: z.string()
-    .min(1, { message: "This field is required" })
-    .min(3, { message: "The first name field does not require a minimum of 3 characters" }),
+    .min(1, { message: "This field is required" }),
     
     lastName: z.string()
-    .min(1, { message: "This field is required" })
-    .min(3, { message: "The last name field does not require a minimum of 3 characters" }),
+    .min(1, { message: "This field is required" }),
     
     username: z.string()
     .min(1, { message: "This field is required" })
-    .min(3, { message: "The username field does not require a minimum of 3 characters" })
-    .regex(/^[A-Za-z]+$/i, "Only letters are allowed"),
+    .regex(/^[A-Za-z]+$/i, "Only letters are allowed")
+    .refine((val) => val.length < 5, { message: "The first name field requires a minimum of 5 characters" }),
 
     email: z.string()
-    .min(1, { message: "This field is required" })
-    .email("Invalid email format"),
+    .email("Invalid email format")
+    .refine((val) => val.length < 1, { message: "This field is required" }),
 
     password: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
     confirmPassword: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
 })
 .refine(({ password, confirmPassword}) => password === confirmPassword, {
-    message: "A confirmação de senha não corresponde",
+    message: "Password confirmation does not match",
     path: ["confirm_password"]
 });
 
