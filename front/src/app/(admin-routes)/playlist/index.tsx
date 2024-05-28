@@ -1,5 +1,8 @@
 "use client"
 
+// services
+import { AlbumAction } from '@/data/actions/albums-actions/playlist-actions';
+import { useFormState } from "react-dom";
 import { getDataCookie } from '../../functions/token-action'
 import { fetchWrapper } from '../../functions/fetch'
 import { useEffect, useState } from "react";
@@ -12,10 +15,6 @@ import AlertDialog from "@/components/Dialogues/AlertDialog";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
 import Pagination from '@/components/Pagination'
-// validation form
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 // Icons
 import { PiMusicNotesPlusFill } from "react-icons/pi";
 import { LuAlertTriangle } from "react-icons/lu";
@@ -25,6 +24,12 @@ import { FaRegRectangleXmark } from "react-icons/fa6";
 type PageProps = {
 	searchParams?: {page?:string, limit?:string}
 }
+
+const INITIAL_STATE = {
+    data: null,
+    zodErrors: null,
+    message: null,
+};    
 
 const Playlist = ({searchParams}:PageProps) => {
     const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState(false)
@@ -40,31 +45,15 @@ const Playlist = ({searchParams}:PageProps) => {
     const page = Number(searchParams?.page) || 1;
     const limit = Number(searchParams?.limit) || 10;
 
-    const datasAlbums = {
-        album: {
-            name_album:nameAlbum,
-            artist: artist,
-            year_album: yearAlbum,
-            user_id : userId
-        }
-    };
-
-    // part of validations
-    const schema = z.object({
-        nameAlbum: z.string()
-        .nonempty("Campo obrigatório!"),
-        yearAlbum: z.string()
-        .nonempty("Campo obrigatório!")
-    })
-
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
-        resolver: zodResolver(schema)
-    });
-
     const [modalSucess, setModalSucess] = useState(false);
     const [modalError, setModalError] = useState(false);
     const [modalAlert, setModalAlert] = useState(false);
     const [modalConteudo, setModalConteudo] = useState("")
+
+    const [formState, formAction] = useFormState(
+        AlbumAction,
+        INITIAL_STATE
+    );
 
     const closeModal = () => {
         setModalSucess(false)
@@ -178,28 +167,9 @@ const Playlist = ({searchParams}:PageProps) => {
         fetchData();
     }
 
-    const saveNewAlbum = () => {
-        const fetchData = async () => {
-            try {
-                const data = await fetchWrapper('/albums/create', {
-                    method: 'POST',                       
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(datasAlbums)
-                });
-            } catch (error) {
-                console.error('Error when creating new album: ', error);
-            }
-        };
-
-        fetchData();
-    }
-
     return(
         <>
             // Part of cards message
-
             {!modalSucess && (
                 <AlertDialog
                     onClose={closeModal}
@@ -274,28 +244,31 @@ const Playlist = ({searchParams}:PageProps) => {
                     >
                         <div className="mb-10 sm:mx-auto sm:w-full sm:max-w-sm">
                             <form 
-                                onSubmit={edit ? handleSubmit(editAlbum) : handleSubmit(saveNewAlbum)} 
+                                action={formAction}
                                 className='space-y-10'
                             >
                                 <Input
                                     label="Name of Album"
                                     value={nameAlbum}
-                                    {...register("nameAlbum")}
-                                />
-                                {errors.firstName && <span className="message-error">{errors?.nameAlbum?.message?.toString()}</span>}
+                                    id="nameAlbum"
+                                    name="nameAlbum"
+                                    type="nameAlbum"
+                                    error={formState?.zodErrors?.nameAlbum}
 
+                                />
                                 <Select
                                     label="Artist of Album"
                                     items={artist}         
                                 />
-
                                 <Input
                                     label="Year of Album"
                                     value={yearAlbum}
-                                    {...register("yearAlbum")}
-                                />
-                                {errors.firstName && <span className="message-error">{errors?.yearAlbum?.message?.toString()}</span>}
+                                    id="yearAlbum"
+                                    name="yearAlbum"
+                                    type="yearAlbum"
+                                    error={formState?.zodErrors?.yearAlbum}
 
+                                />
                                 <Button
                                     text={edit ? 'Edit this album' : 'Save new album'}
                                 />

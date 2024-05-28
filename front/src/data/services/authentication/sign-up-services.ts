@@ -1,4 +1,3 @@
-
 import { fetchWrapper } from '../../../app/functions/fetch'
 
 interface RegisterUserProps {

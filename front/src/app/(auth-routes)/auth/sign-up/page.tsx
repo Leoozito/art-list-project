@@ -5,9 +5,6 @@ import Input from '@/components/Input';
 import { useState } from 'react';
 import { RiAdminLine } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { registerUserAction } from '@/data/actions/authentication/sign-up-actions';
 import { useFormState } from "react-dom";
 
