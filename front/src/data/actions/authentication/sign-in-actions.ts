@@ -1,4 +1,4 @@
-"use server"
+"use client"
 import * as z from 'zod';
 import loginUserService from "../../services/authentication/sign-in-services";
 import { cookies } from "next/headers";
@@ -47,5 +47,5 @@ export async function loginUserAction(prevState: any, formData: FormData) {
       };
     }
     
-    redirect("/dashboard");
+    redirect("/playlist");
 }

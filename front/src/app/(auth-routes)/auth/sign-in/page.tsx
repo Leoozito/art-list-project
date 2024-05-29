@@ -24,11 +24,7 @@ const Login = ({action}:any) => {
         loginUserAction,
         INITIAL_STATE
     );
-
-    // const { register, handleSubmit, formState: { errors }, setValue } = useForm({
-    //     resolver: zodResolver(schema)
-    // });
-
+    
     return(
 
         <>

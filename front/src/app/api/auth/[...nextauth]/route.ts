@@ -22,7 +22,6 @@ const nextAuthOptions: NextAuthOptions = {
 						password: credentials?.password
 					})
 				})
-				console.log(response.json())
 
 				const user = await response.json()
 

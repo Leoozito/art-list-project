@@ -55,6 +55,8 @@ const Playlist = ({searchParams}:PageProps) => {
         INITIAL_STATE
     );
 
+    // console.log("TESTE DA TELA: ", formAction, " E " , formState )
+
     const closeModal = () => {
         setModalSucess(false)
         setModalError(false)
