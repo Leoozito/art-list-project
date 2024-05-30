@@ -1,6 +1,6 @@
-"use server"
+"use client"
 import * as z from 'zod';
-import newAlbumService from "../../services/album-services/playlist";
+import {newAlbumService} from "../../services/album-services/playlist-service";
 
 const AlbumSchema = z.object({
     nameAlbum: z.string()
@@ -15,8 +15,6 @@ export async function AlbumAction(prevState: any, formData: FormData) {
         yearAlbum: formData.get("yearAlbum"),
     });
   
-    console.log("DADOOS: ",formData, "AND", prevState)
-
     if (!validatedFields.success) {
       return {
         ...prevState,
@@ -26,21 +24,16 @@ export async function AlbumAction(prevState: any, formData: FormData) {
       };
     }
 
-    // const additionalData = {
-    //   artist: formData.get("artist"),
-    //   user_id: formData.get("user_id") 
-    // }
+    const additionalData = {
+      artist: String(formData.get("artist")),
+      user_id: Number(formData.get("user_id"))
+    }
 
-    // const albumData = {
-    //   ...validatedFields.data,
-    //   ...additionalData,
-    // };
+    const albumData = {
+      ...validatedFields.data,
+      ...additionalData
+    };
   
-    await newAlbumService(validatedFields.data)
-    .then((res) => {
-      console.log(res)
-    }).catch((err) => {
-      console.log(err)
-    })
+    await newAlbumService(albumData)
   
 }

@@ -3,12 +3,9 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import CardLayout from '@/components/Card/CardLayout';
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useFormState } from "react-dom";
 import { loginUserAction } from '@/data/actions/authentication/sign-in-actions';
+import Link from 'next/link';
 
 const INITIAL_STATE = {
     data: null,
@@ -16,9 +13,7 @@ const INITIAL_STATE = {
     message: null,
 };
 
-const Login = ({action}:any) => {
-
-    const router = useRouter()
+const Login = () => {
 
     const [formState, formAction] = useFormState(
         loginUserAction,
@@ -49,12 +44,8 @@ const Login = ({action}:any) => {
                                         id="email"
                                         name="email"
                                         type="email"
+                                        error={formState?.zodErrors?.email}
                                     />
-                                    {formState?.zodErrors?.email &&
-                                        <span className="">
-                                            {formState?.zodErrors?.email?.err}
-                                        </span>
-                                    }
                                     <Input
                                         required={true}
                                         placeholder="Enter your password: "
@@ -62,17 +53,17 @@ const Login = ({action}:any) => {
                                         id="password"
                                         name="password"
                                         type="password"
+                                        error={formState?.zodErrors?.password}
                                     />
-                                    {formState?.zodErrors?.password &&
-                                        <span className="">
-                                            {formState?.zodErrors?.password?.err}
-                                        </span>
-                                    }
                                     <Button 
                                         text="Log In"
                                     />
                                     <p className="text-lg font-semibold text-gray-900">Don't have an account with us yet?</p>
-                                    <p className="text-lg font-semibold text-indigo-600 cursor-pointer" onClick={() => router.replace('/auth/sign-up')}>Click here and register</p>
+                                    <Link 
+                                        href='/auth/sign-up' 
+                                    >
+                                        Click here and register
+                                    </Link>
                                 </form>
                             </div>
                         </div>
