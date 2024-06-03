@@ -74,8 +74,9 @@ const Playlist = ({searchParams}:PageProps) => {
         typeUser()
 
         const fetchArtists = async () => {
-            const responseAlbums = await getAllAlbumsService();
-            setAllAlbums(responseAlbums);
+            const { datasAlbums, metadata } = await getAllAlbumsService(page, limit, userId);
+            setAllAlbums(datasAlbums);
+
             const responseArtists = await getAllArtistsService();
             setArtist(responseArtists)
         };
@@ -159,11 +160,11 @@ const Playlist = ({searchParams}:PageProps) => {
                             />
                         ))}
                     </div>
-                    {allAlbums && (<Pagination
+                    <Pagination
                         page={page}
                         limit={limit}
-                        total={2}
-                    />)}
+                        total={2} // metadata.pagination.total
+                    />
                 </div>
                 {openCardCreateAlbum && (
                     <Modal

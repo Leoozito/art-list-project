@@ -25,10 +25,16 @@ async function getAllArtistsService()
     }
 }
 
-async function getAllAlbumsService() 
+async function getAllAlbumsService(page:number, limit:number, user_id:number) 
 {
     try {
-        const response = await fetchWrapper('/albums', {
+        const queryParams = new URLSearchParams({
+            page: page.toString(),
+            limit: limit.toString(),
+            user_id: user_id.toString()
+        }).toString();
+
+        const response = await fetchWrapper(`/albums?${queryParams}`, {
             method: 'GET',
         });
         console.log("LISTA ALBUMS: ", response)
