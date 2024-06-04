@@ -1,6 +1,9 @@
 import { RiCloseCircleLine } from "react-icons/ri";
 
-const Modal = ({openModal,children, onClose}:any) => {
+const Modal = ({openModal,children}:any) => {
+
+    
+
     return(
             <>
                 {openModal && (

@@ -1,20 +1,14 @@
 "use client"
 
 // services
-import { useEffect, useState } from "react";
-import { useFormState } from "react-dom";
-import { AlbumAction } from '@/data/actions/albums-actions/playlist-actions';
-import { getDataCookie } from '../../functions/token-action'
-import { fetchWrapper } from '../../functions/fetch'
 import { getAllArtistsService, getAllAlbumsService, getAlbumByIdService, newAlbumService, editAlbumService, deleteAlbumService } from "@/data/services/album-services/playlist-service"
+import { useEffect, useState } from "react";
+import { getDataCookie } from '../../functions/token-action'
 // components
-import Button from "@/components/Button";
+import FormPlaylist from "@/components/Forms/FormPlaylist";
 import AlbumCard from "@/components/Card/AlbumCard";
 import CardLayout from "@/components/Card/CardLayout";
-import Modal from "@/components/Dialogues/Modal";
 import AlertDialog from "@/components/Dialogues/AlertDialog";
-import Input from "@/components/Input";
-import Select from "@/components/Select";
 import Pagination from '@/components/Pagination'
 // Icons
 import { PiMusicNotesPlusFill } from "react-icons/pi";
@@ -24,19 +18,10 @@ import { FaRegRectangleXmark } from "react-icons/fa6";
 
 type PageProps = {
 	searchParams?: {page?:string, limit?:string}
-}
-
-const INITIAL_STATE = {
-    data: null,
-    zodErrors: null,
-    message: null,
-};    
+}    
 
 const Playlist = ({searchParams}:PageProps) => {
     const [allAlbums, setAllAlbums] = useState<any[]>([])
-    const [artist, setArtist] = useState<any[]>([])
-    const [nameAlbum, setNameAlbum] = useState("")
-    const [yearAlbum, setYearAlbum] = useState("")
     
     const [userId, setUserId] = useState<any>()
     const [typeRole, setTypeRole] = useState<any>()
@@ -44,18 +29,13 @@ const Playlist = ({searchParams}:PageProps) => {
     const page = Number(searchParams?.page) || 1;
     const limit = Number(searchParams?.limit) || 10;
     
-    const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState(false)
+    const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState<boolean>(false)
     const [edit, setEdit] = useState(false)
     
     const [modalSucess, setModalSucess] = useState(false);
     const [modalError, setModalError] = useState(false);
     const [modalAlert, setModalAlert] = useState(false);
     const [modalConteudo, setModalConteudo] = useState("")
-
-    const [formState, formAction] = useFormState(
-        AlbumAction,
-        INITIAL_STATE
-    );
 
     const closeModal = () => {
         setModalSucess(false)
@@ -78,7 +58,7 @@ const Playlist = ({searchParams}:PageProps) => {
             setAllAlbums(datasAlbums);
 
             const responseArtists = await getAllArtistsService();
-            setArtist(responseArtists)
+            // setArtist(responseArtists)
         };
 
         fetchArtists()
@@ -88,9 +68,9 @@ const Playlist = ({searchParams}:PageProps) => {
         try {
             const data = await getAlbumByIdService(id);
 
-            setArtist(data.artist)
-            setNameAlbum(data.name_album)
-            setYearAlbum(data.year_album)
+            // setArtist(data.artist)
+            // setNameAlbum(data.name_album)
+            // setYearAlbum(data.year_album)
         } catch (error:any) {
             console.error(`Error when querying album data, ID: ${id}`,error);
         }
@@ -166,46 +146,10 @@ const Playlist = ({searchParams}:PageProps) => {
                         total={2} // metadata.pagination.total
                     />
                 </div>
-                {openCardCreateAlbum && (
-                    <Modal
-                        openModal={openCardCreateAlbum}
-                        onClose={() => setOpenCardCreateAlbum(false)}
-                    >
-                        <div className="mb-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                            <form 
-                                action={formAction}
-                                className='space-y-10'
-                            >
-                                <Input
-                                    required={true}
-                                    label="Name of Album"
-                                    placeholder="Enter name of your album: "
-                                    id="nameAlbum"
-                                    name="nameAlbum"
-                                    type="nameAlbum"
-                                    error={formState?.zodErrors?.nameAlbum}
-
-                                />
-                                <Select
-                                    label="Artist of Album"
-                                    items={artist}         
-                                />
-                                <Input
-                                    required={true}
-                                    label="Year of Album"
-                                    placeholder="Enter year of your album: "
-                                    id="yearAlbum"
-                                    name="yearAlbum"
-                                    type="yearAlbum"
-                                    error={formState?.zodErrors?.yearAlbum}
-                                />
-                                <Button
-                                    text={edit ? 'Edit this album' : 'Save new album'}
-                                />
-                            </form>
-                        </div>
-                    </Modal>
-                )}
+                <FormPlaylist
+                    openCard={openCardCreateAlbum}
+                    editAlbum={edit}
+                />
             </CardLayout>
         </>    
     )
