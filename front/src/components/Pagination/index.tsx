@@ -15,9 +15,9 @@ const Pagination = ({ page, limit, total }: PaginationProps) => {
 
     const generateUrl = (page:number) => {
         const params = new URLSearchParams(searchParams)
-        params.set('page', page.toString());
+        params.set('page', page?.toString());
 
-        const url = `${pathName}?${params.toString()}`
+        const url = `${pathName}?${params?.toString()}`
         return url
     }
 

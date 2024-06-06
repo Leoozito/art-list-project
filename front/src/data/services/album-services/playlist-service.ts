@@ -29,10 +29,10 @@ async function getAllAlbumsService(page:number, limit:number, user_id:number)
 {
     try {
         const queryParams = new URLSearchParams({
-            page: page.toString(),
-            limit: limit.toString(),
-            user_id: user_id.toString()
-        }).toString();
+            page: page?.toString(),
+            limit: limit?.toString(),
+            user_id: user_id?.toString()
+        })?.toString();
 
         const response = await fetchWrapper(`/albums?${queryParams}`, {
             method: 'GET',
@@ -58,9 +58,7 @@ async function getAlbumByIdService(id:number)
 
 
 async function newAlbumService(albumDatas: AlbumProps) 
-{
-    console.log("ALBUMM TESTE:", albumDatas)
-    
+{    
     const response = await fetchWrapper('/albums/create', {
         method: 'POST',                       
         headers: {

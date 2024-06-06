@@ -12,14 +12,18 @@ const nextAuthOptions: NextAuthOptions = {
 			},
 
 			async authorize(credentials, req) {
+				console.log(credentials)
+
 				const response = await fetch(`${process.env.NEXT_PUBLIC_ROUTE_API}/login`, {
 					method: 'POST',
 					headers: {
 						'Content-type': 'application/json'
 					},
 					body: JSON.stringify({
-						email: credentials?.email,
-						password: credentials?.password
+						user: {
+							email: credentials?.email,
+							password: credentials?.password
+						}
 					})
 				})
 
