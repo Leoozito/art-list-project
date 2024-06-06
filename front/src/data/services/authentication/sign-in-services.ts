@@ -22,6 +22,5 @@ export default async function loginUserService(userDatas: LoginUserProps) {
         return
     }
 
-    // router.replace('/playlist')
     return response;
 }

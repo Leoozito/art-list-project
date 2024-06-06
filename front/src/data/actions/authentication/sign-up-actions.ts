@@ -14,11 +14,13 @@ const signUpSchema = z.object({
     username: z.string()
     .min(1, { message: "This field is required" })
     .regex(/^[A-Za-z]+$/i, "Only letters are allowed")
-    .refine((val) => val.length < 5, { message: "The first name field requires a minimum of 5 characters" }),
+    .refine((val) => val.slice(val.length - 4), {
+      message: "String can't be more than 255 characters",
+    }),
 
     email: z.string()
-    .email("Invalid email format")
-    .refine((val) => val.length < 1, { message: "This field is required" }),
+    .min(1, { message: "This field is required"})
+    .email({message: "Invalid email format"}),
 
     password: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
     confirmPassword: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
@@ -47,7 +49,17 @@ export async function registerUserAction(prevState: any, formData: FormData) {
       };
     }
   
-    const responseData = await registerUserService(validatedFields.data);
+    const responseData = await registerUserService({
+        full_name: {
+            firstName: validatedFields.data.firstName,
+            lastName: validatedFields.data.lastName
+        },
+        role: "user",
+        username: validatedFields.data.username,
+        email: validatedFields.data.email,
+        password: validatedFields.data.password,
+        confirmPassword: validatedFields.data.confirmPassword,
+    });
   
     if (!responseData) {
       return {
@@ -67,6 +79,8 @@ export async function registerUserAction(prevState: any, formData: FormData) {
       };
     }
   
-    cookies().set("jwt", responseData.jwt);
-    redirect("/dashboard");
+    // cookies().set("id", responseData.id);
+    // cookies().set("role", responseData.role);
+
+    redirect("/playlist");
 }

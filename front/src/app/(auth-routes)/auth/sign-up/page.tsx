@@ -34,7 +34,7 @@ const SignUp = () => {
                     </div>
 
                     <div className='w-full rounded-md py-2.5 justify-center flex items-center'>
-                        <button 
+                        {/* <button 
                             onClick={() => setRole("user")} type="button" className={`inline-flex items-center px-8 py-4 text-xl font-extrabold text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ${role === 'user' ? 'text-white bg-gray-900' : 'text-gray-900 bg-[#ffffff]'}`}
                         >
                             <FaRegUser className="mr-2"/>
@@ -45,7 +45,7 @@ const SignUp = () => {
                         >
                             <RiAdminLine className="mr-2 text-2xl"/>
                             Administrator
-                        </button>
+                        </button> */}
 
                     </div>
 
