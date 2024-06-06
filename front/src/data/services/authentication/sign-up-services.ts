@@ -1,8 +1,11 @@
 import { fetchWrapper } from '../../../app/functions/fetch'
 
 interface RegisterUserProps {
-    firstName:string,
-    lastName: string,
+    full_name: {
+        firstName:string,
+        lastName: string,
+    };
+    role: string;
     username: string;
     email: string;
     password: string;
@@ -19,10 +22,8 @@ export default async function registerUserService(userDatas: RegisterUserProps) 
     });
 
     if (response?.error) {
-        console.log(response)
         return
     }
 
-    // router.replace('/playlist')
-    return response.json();
+    return response;
 }

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy]
-  skip_before_action :verify_authenticity_token, only: [:login]
+  skip_before_action :verify_authenticity_token, only: [:login, :create]
 
   # GET /users or /users.json
   def index
@@ -83,7 +83,8 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:full_name, :email, :username, :password, :role)
+      full_name = "#{params[:full_name][:firstName]} #{params[:full_name][:lastName]}"
+      params.permit(:email, :username, :password, :role).merge(full_name: full_name)      
     end
 
     def encode_token(payload)
