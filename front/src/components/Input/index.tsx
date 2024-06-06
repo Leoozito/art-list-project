@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 
 const Input = ({label, type, name, error, ...rest }:any ) => {
-    console.log(error)
 
     return(
         <>

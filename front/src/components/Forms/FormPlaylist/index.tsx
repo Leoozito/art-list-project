@@ -10,6 +10,11 @@ import { fetchWrapper } from '../../../app/functions/fetch'
 interface FormPlaylistProps {
     editAlbum: boolean
     openCard: boolean;
+    albumData: { 
+        artist: string, 
+        nameAlbum: string, 
+        yearAlbum: string 
+    };
 }
 
 const INITIAL_STATE = {
@@ -18,7 +23,7 @@ const INITIAL_STATE = {
     message: null,
 };
 
-const FormPlaylist:React.FC<FormPlaylistProps> = ({ editAlbum, openCard }) => {
+const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumData, editAlbum, openCard }) => {
     
     const [artist, setArtist] = useState<any[]>([])
     const [nameAlbum, setNameAlbum] = useState("")
@@ -28,6 +33,8 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ editAlbum, openCard }) => {
         AlbumAction,
         INITIAL_STATE
     );
+
+    console.log("YEAH TODOS OS DADOS DO ALBUM: ", albumData)
     
     return(
         <>

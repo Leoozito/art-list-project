@@ -22,7 +22,12 @@ type PageProps = {
 
 const Playlist = ({searchParams}:PageProps) => {
     const [allAlbums, setAllAlbums] = useState<any[]>([])
-    
+    const [albumData, setAlbumData] = useState({
+        artist: '',
+        nameAlbum: '',
+        yearAlbum: ''
+    });
+
     const [userId, setUserId] = useState<any>()
     const [typeRole, setTypeRole] = useState<any>()
     
@@ -78,7 +83,6 @@ const Playlist = ({searchParams}:PageProps) => {
 
     return(
         <>
-            // Part of cards message
             {!modalSucess && (
                 <AlertDialog
                     onClose={closeModal}
@@ -147,6 +151,7 @@ const Playlist = ({searchParams}:PageProps) => {
                     />
                 </div>
                 <FormPlaylist
+                    albumData={albumData}
                     openCard={openCardCreateAlbum}
                     editAlbum={edit}
                 />

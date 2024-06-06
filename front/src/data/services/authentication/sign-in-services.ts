@@ -6,10 +6,14 @@ interface LoginUserProps {
 }
 
 export default async function loginUserService(userDatas: LoginUserProps) {
+
+    const email = userDatas.email
+    const password = userDatas.password
     
     const response = await signIn('credentials',
     {
-        userDatas,
+        email, 
+        password,
         redirect: false
     })
 
