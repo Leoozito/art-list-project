@@ -13,18 +13,23 @@ class UsersController < ApplicationController
   end
 
   def login
-    user = User.find_by(email: params["user"]["email"]).try(:authenticate, params["user"]["password"])
+    user_params = params.require(:user).permit(:email, :password)
+    Rails.logger.info "USUARIO PARAMS: #{user_params}"
+
+    user = User.find_by(email: user_params[:email]).try(:authenticate, user_params[:password])
+    
+    Rails.logger.info "USUARIO: #{user}"
+    
     if user
       token = encode_token({ user_id: user.id })
       session[:user_id] = user.id
       render json: {
-        status: :created,
         logged_in: true,
         user: user.as_json(only: [:id, :email, :name, :full_name, :username, :role, :created_at, :updated_at]),
         token: token
-      }
+      }, status: :created
     else
-      render json: { status: 401 }
+      render json: { status: 401 }, status: :unauthorized
     end
   end
    
