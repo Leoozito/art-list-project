@@ -13,13 +13,19 @@ async function getAllArtistsService()
     try {
         const data = await fetchWrapper('/artists', {
             method: 'GET',
-        })
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        let AllArtistNames = [];
 
         for (let i = 0; i < data.json.length; i++) {
             for (let j = 0; j < data.json[i].length; j++) {
-                return data?.json[i][j]?.name
+                AllArtistNames.push(data.json[i][j].name);
             }
         }
+        return AllArtistNames
     } catch (error) {
         console.error('Error fetching artists: ', error);
     }

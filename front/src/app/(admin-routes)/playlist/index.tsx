@@ -21,7 +21,9 @@ type PageProps = {
 }    
 
 const Playlist = ({searchParams}:PageProps) => {
-    const [allAlbums, setAllAlbums] = useState<any[]>([])
+    const [allAlbums, setAllAlbums] = useState<any>()
+    const [artist, setArtist] = useState<any>()
+
     const [albumData, setAlbumData] = useState({
         artist: '',
         nameAlbum: '',
@@ -36,7 +38,7 @@ const Playlist = ({searchParams}:PageProps) => {
     
     const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState<boolean>(false)
     const [edit, setEdit] = useState(false)
-    
+
     const [modalSucess, setModalSucess] = useState(false);
     const [modalError, setModalError] = useState(false);
     const [modalAlert, setModalAlert] = useState(false);
@@ -59,11 +61,11 @@ const Playlist = ({searchParams}:PageProps) => {
         typeUser()
 
         const fetchArtists = async () => {
-            const { datasAlbums, metadata } = await getAllAlbumsService(page, limit, userId);
+            const datasAlbums = await getAllAlbumsService(page, limit, userId);
             setAllAlbums(datasAlbums);
 
             const responseArtists = await getAllArtistsService();
-            // setArtist(responseArtists)
+            setArtist(responseArtists)
         };
 
         fetchArtists()
