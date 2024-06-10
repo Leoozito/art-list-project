@@ -19,6 +19,6 @@ Rails.application.routes.draw do
   post '/login', to: 'users#login'
   post '/auth/register', to: 'users#create'
 
-  get "artists", to: "artists#index"
+  get "/artists", to: "artists#index"
 
 end

@@ -11,7 +11,7 @@ module Api
     config.autoload_lib(ignore: %w(assets tasks))
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'http://localhost:3001' # Pode ser ajustado para permitir múltiplas origens ou uma lista de origens
+        origins 'http://localhost:3000' # Pode ser ajustado para permitir múltiplas origens ou uma lista de origens
         resource '*',
           headers: :any,
           methods: [:get, :post, :put, :patch, :delete, :options, :head],
