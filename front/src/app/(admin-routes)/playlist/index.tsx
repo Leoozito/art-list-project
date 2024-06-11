@@ -3,7 +3,8 @@
 // services
 import { getAllArtistsService, getAllAlbumsService, getAlbumByIdService, newAlbumService, editAlbumService, deleteAlbumService } from "@/data/services/album-services/playlist-service"
 import { useEffect, useState } from "react";
-import { getDataCookie } from '../../functions/token-action'
+import { getDataCookie } from '../../functions/cookies-actions'
+import { useSession } from "next-auth/react";
 // components
 import FormPlaylist from "@/components/Forms/FormPlaylist";
 import AlbumCard from "@/components/Card/AlbumCard";
@@ -21,6 +22,7 @@ type PageProps = {
 }    
 
 const Playlist = ({searchParams}:PageProps) => {
+    const { data: session, status } = useSession()
     const [allAlbums, setAllAlbums] = useState<any>()
     const [artist, setArtist] = useState<any>()
 
@@ -50,15 +52,16 @@ const Playlist = ({searchParams}:PageProps) => {
         setModalAlert(false)
     }
 
-    const typeUser = async () => {
-        const role_user = await getDataCookie('role')
-        const id_user = await getDataCookie("id")
-        setUserId(id_user)
-        setTypeRole(role_user)
+    const typeUser = async (session:any) => {
+        if (session) {
+            console.log("SESSION",session)
+            setUserId(JSON.stringify(session?.user?.id))
+            setTypeRole(JSON.stringify(session?.user?.role))
+        }
     }
 
     useEffect(() => {
-        typeUser()
+        typeUser(session)
 
         const fetchArtists = async () => {
             const datasAlbums = await getAllAlbumsService(page, limit, userId);
@@ -69,7 +72,7 @@ const Playlist = ({searchParams}:PageProps) => {
         };
 
         fetchArtists()
-    }, [])
+    }, [session])
 
     const getAlbumById = async (id:number) => {
         try {
@@ -81,6 +84,10 @@ const Playlist = ({searchParams}:PageProps) => {
         } catch (error:any) {
             console.error(`Error when querying album data, ID: ${id}`,error);
         }
+    }
+    
+    if (status === "loading") {
+        return <div>Loading...</div>
     }
 
     return(
