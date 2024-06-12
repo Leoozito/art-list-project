@@ -36,18 +36,18 @@ const Playlist = ({searchParams}:PageProps) => {
     const limit = Number(searchParams?.limit) || 10;
     
     const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState<boolean>(false)
-    const [edit, setEdit] = useState(false)
+    const [edit, setEdit] = useState<boolean>(false)
 
-    const [modalSucess, setModalSucess] = useState(false);
-    const [modalError, setModalError] = useState(false);
-    const [modalAlert, setModalAlert] = useState(false);
-    const [modalConteudo, setModalConteudo] = useState("")
+    // const [modalSucess, setModalSucess] = useState(false);
+    // const [modalError, setModalError] = useState(false);
+    // const [modalAlert, setModalAlert] = useState(false);
+    // const [modalConteudo, setModalConteudo] = useState("")
 
-    const closeModal = () => {
-        setModalSucess(false)
-        setModalError(false)
-        setModalAlert(false)
-    }
+    // const closeModal = () => {
+    //     setModalSucess(false)
+    //     setModalError(false)
+    //     setModalAlert(false)
+    // }
 
     const typeUser = async (session:any) => {
         if (session) {
@@ -57,18 +57,23 @@ const Playlist = ({searchParams}:PageProps) => {
     }
 
     useEffect(() => {
-        // console.log("oooi",session)
-        typeUser(session)
+        if (session !== null && session !== undefined) {
+            typeUser(session)
 
-        const fetchArtists = async () => {
-            const datasAlbums = await getAllAlbumsService(page, limit, userId);
-            setAllAlbums(datasAlbums?.albums);
-            const responseArtists = await getAllArtistsService();
-            setArtist(responseArtists)
-        };
+            const fetchArtists = async () => {
+                const datasAlbums = await getAllAlbumsService(page, limit, userId);
+                setAllAlbums(datasAlbums?.albums);
+                const responseArtists = await getAllArtistsService();
+                setArtist(responseArtists)
+            };
 
-        fetchArtists()
-    }, [session && typeof session !== 'undefined'])
+            fetchArtists()
+        }
+    }, [session])
+
+    useEffect(() => {
+        setOpenCardCreateAlbum(false)
+    }, [openCardCreateAlbum])
 
     // const getAlbumById = async (id:number) => {
     //     try {
@@ -88,7 +93,7 @@ const Playlist = ({searchParams}:PageProps) => {
 
     return(
         <>
-            {!modalSucess && (
+            {/* {!modalSucess && (
                 <AlertDialog
                     onClose={closeModal}
                     conteudo={modalConteudo}
@@ -116,7 +121,7 @@ const Playlist = ({searchParams}:PageProps) => {
                     icon={<FaRegRectangleXmark/>}
                     iconColor="#ef4444"
                 />                                  
-            )}
+            )} */}
             <CardLayout>
                 <CardCreateAlbum 
                     onClick={() => setOpenCardCreateAlbum  (!openCardCreateAlbum)}

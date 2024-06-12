@@ -1,10 +1,23 @@
+import { useState, useEffect } from "react";
 import { RiCloseCircleLine } from "react-icons/ri";
 
 const Modal = ({openModal,children}:any) => {
 
+    const [modal, setModal] = useState(openModal);
+
+    useEffect(() => {
+        setModal(openModal)
+    },[openModal])
+
+    console.log(openModal, "and > ", modal)
+
+    const closeModal = () => {
+        setModal(false)
+    };
+
     return(
             <>
-                {openModal && (
+                {modal && (
                     <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
@@ -12,7 +25,7 @@ const Modal = ({openModal,children}:any) => {
                             <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">                    
                                 <div className="relative transform overflow-hidden rounded-lg bg-white shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl py-8 px-14 ">
                                     <div 
-                                        onClick={() => !openModal}
+                                        onClick={closeModal}
                                         className="p-4 justify-end flex items-end cursor-pointer "
                                     >
                                         <RiCloseCircleLine 
