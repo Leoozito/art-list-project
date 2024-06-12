@@ -4,13 +4,13 @@ import Image from "next/image";
 import Navbar from "../Navbar";
 import { signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation'
-import { deleteToken } from '../../app/functions/token-action'
+import { deleteDataCookie } from '../../app/functions/cookies-actions'
 
 const SideBar = () => {
 	const router = useRouter()
 
 	async function logout() {
-        deleteToken()
+        deleteDataCookie("next-auth")
 		await signOut({
 			redirect: false
 		})
