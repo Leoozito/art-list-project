@@ -3,7 +3,6 @@
 // services
 import { getAllArtistsService, getAllAlbumsService, getAlbumByIdService, newAlbumService, editAlbumService, deleteAlbumService } from "@/data/services/album-services/playlist-service"
 import { useEffect, useState } from "react";
-import { getDataCookie } from '../../functions/cookies-actions'
 import { useSession } from "next-auth/react";
 // components
 import FormPlaylist from "@/components/Forms/FormPlaylist";
@@ -11,8 +10,8 @@ import AlbumCard from "@/components/Card/AlbumCard";
 import CardLayout from "@/components/Card/CardLayout";
 import AlertDialog from "@/components/Dialogues/AlertDialog";
 import Pagination from '@/components/Pagination'
+import CardCreateAlbum from "@/components/Card/CardCreateAlbum";
 // Icons
-import { PiMusicNotesPlusFill } from "react-icons/pi";
 import { LuAlertTriangle } from "react-icons/lu";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { FaRegRectangleXmark } from "react-icons/fa6";
@@ -25,13 +24,11 @@ const Playlist = ({searchParams}:PageProps) => {
     const { data: session, status } = useSession()
     const [allAlbums, setAllAlbums] = useState<any>()
     const [artist, setArtist] = useState<any>()
-
     const [albumData, setAlbumData] = useState({
-        artist: '',
+        artists: artist,
         nameAlbum: '',
         yearAlbum: ''
     });
-
     const [userId, setUserId] = useState<any>()
     const [typeRole, setTypeRole] = useState<any>()
     
@@ -54,37 +51,36 @@ const Playlist = ({searchParams}:PageProps) => {
 
     const typeUser = async (session:any) => {
         if (session) {
-            console.log("SESSION",session)
             setUserId(JSON.stringify(session?.user?.id))
             setTypeRole(JSON.stringify(session?.user?.role))
         }
     }
 
     useEffect(() => {
+        // console.log("oooi",session)
         typeUser(session)
 
         const fetchArtists = async () => {
             const datasAlbums = await getAllAlbumsService(page, limit, userId);
-            setAllAlbums(datasAlbums);
-
+            setAllAlbums(datasAlbums?.albums);
             const responseArtists = await getAllArtistsService();
             setArtist(responseArtists)
         };
 
         fetchArtists()
-    }, [session])
+    }, [session && typeof session !== 'undefined'])
 
-    const getAlbumById = async (id:number) => {
-        try {
-            const data = await getAlbumByIdService(id);
+    // const getAlbumById = async (id:number) => {
+    //     try {
+    //         const data = await getAlbumByIdService(id);
 
-            // setArtist(data.artist)
-            // setNameAlbum(data.name_album)
-            // setYearAlbum(data.year_album)
-        } catch (error:any) {
-            console.error(`Error when querying album data, ID: ${id}`,error);
-        }
-    }
+    //         // setArtist(data.artist)
+    //         // setNameAlbum(data.name_album)
+    //         // setYearAlbum(data.year_album)
+    //     } catch (error:any) {
+    //         console.error(`Error when querying album data, ID: ${id}`,error);
+    //     }
+    // }
     
     if (status === "loading") {
         return <div>Loading...</div>
@@ -119,46 +115,28 @@ const Playlist = ({searchParams}:PageProps) => {
                     openModal={modalError}
                     icon={<FaRegRectangleXmark/>}
                     iconColor="#ef4444"
-                />
+                />                                  
             )}
-
             <CardLayout>
-                <div className="p-10">
-                    <div
-                        onClick={() => setOpenCardCreateAlbum(!openCardCreateAlbum)}
-                        className="cursor-pointer flex-col flex-grow mx-60 flex"
-                    >
-                        <label className="block text-sm font-medium leading-6 text-gray-900">Create new album</label>
-                        <div className="hover:bg-gray-100 flex-col flex justify-center items-center rounded-lg border border-dashed border-gray-900/25 p-8 text-center sm:text-sm lg:text-lg leading-6 text-gray-600">
-                            <PiMusicNotesPlusFill
-                                className="mb-4 text-center text-8xl text-gray-300"
-                            />
-                            <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600">
-                                <span>Click Here</span>
-                            </label>
-                            <p className="pl-1">And create a new album by your favorite artist</p>
-                        </div>
-                    </div>
-                    <div className="mt-14 gap-12 grid sm:grid-cols-2 lg:grid-cols-3">
-                        {allAlbums && (
-                            allAlbums.map((album:any) =>                        
-                            <AlbumCard
-                                isAdm={typeRole}
-                                key={album.id}
-                                onDelete={() => deleteAlbumService(album.id)}
-                                onClick={getAlbumById(album.id)}
-                                artist={album.artist}
-                                nameAlbum={album.name_album}
-                                yearAlbum={album.year_album}
-                            />
-                        ))}
-                    </div>
-                    <Pagination
-                        page={page}
-                        limit={limit}
-                        total={2} // metadata.pagination.total
-                    />
+                <CardCreateAlbum 
+                    onClick={() => setOpenCardCreateAlbum  (!openCardCreateAlbum)}
+                />                                
+                <div className="mt-14 gap-12 grid sm:grid-cols-2 lg:grid-cols-3">
+                    {allAlbums && allAlbums.map((album:any) =>                        
+                        <AlbumCard
+                            isAdm={typeRole}
+                            key={album.id}
+                            onDelete={() => deleteAlbumService(album.id)}
+                            // onClick={getAlbumById(album.id)}
+                            albumDatas={album}
+                        />
+                    )}
                 </div>
+                <Pagination
+                    page={page}
+                    limit={limit}
+                    total={2} // metadata.pagination.total
+                />
                 <FormPlaylist
                     albumData={albumData}
                     openCard={openCardCreateAlbum}

@@ -43,7 +43,6 @@ async function getAllAlbumsService(page:number, limit:number, user_id:number)
         const response = await fetchWrapper(`/albums?${queryParams}`, {
             method: 'GET',
         });
-        console.log("LISTA ALBUMS: ", response)
         return response;
     } catch (error) {
         console.error('Error fetching albums: ', error);
