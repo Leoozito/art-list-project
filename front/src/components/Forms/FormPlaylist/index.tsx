@@ -5,11 +5,12 @@ import Button from "@/components/Button";
 import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { AlbumAction } from '@/data/actions/albums-actions/playlist-actions';
+import { getAllArtistsService } from "@/data/services/album-services/playlist-service";
 
 interface FormPlaylistProps {
     editAlbum: boolean
     openCard: boolean;
-    albumData: { 
+    albumEditDatas: { 
         artists: any, 
         nameAlbum: string, 
         yearAlbum: string 
@@ -22,23 +23,32 @@ const INITIAL_STATE = {
     message: null,
 };
 
-const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumData, editAlbum, openCard }) => {
+const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, openCard }) => {
     const [artist, setArtist] = useState<any>()
     const [nameAlbum, setNameAlbum] = useState("")
     const [yearAlbum, setYearAlbum] = useState("")
 
     useEffect(() => {
-        setArtist(albumData?.artists)
-        setNameAlbum(albumData?.nameAlbum)
-        setYearAlbum(albumData?.yearAlbum)
-    }, [albumData])
+        setArtist(albumEditDatas?.artists)
+        setNameAlbum(albumEditDatas?.nameAlbum)
+        setYearAlbum(albumEditDatas?.yearAlbum)
+    }, [albumEditDatas && editAlbum])
+
+    useEffect(() => {
+        const fetchArtists = async () => {
+            const responseArtists = await getAllArtistsService();
+            setArtist(responseArtists)
+        }
+
+        fetchArtists()
+    }, [])
 
     const [formState, formAction] = useFormState(
         AlbumAction,
         INITIAL_STATE
     );
 
-    // console.log("YEAH TODOS OS DADOS DO ALBUM: ", albumData)
+    // console.log("YEAH TODOS OS DADOS DO ALBUM: ", albumEditDatas)
     
     return(
         <>

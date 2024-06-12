@@ -1,7 +1,7 @@
 "use client"
 
 // services
-import { getAllArtistsService, getAllAlbumsService, getAlbumByIdService, newAlbumService, editAlbumService, deleteAlbumService } from "@/data/services/album-services/playlist-service"
+import { getAllAlbumsService, getAlbumByIdService, newAlbumService, editAlbumService, deleteAlbumService } from "@/data/services/album-services/playlist-service"
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 // components
@@ -23,20 +23,20 @@ type PageProps = {
 const Playlist = ({searchParams}:PageProps) => {
     const { data: session, status } = useSession()
     const [allAlbums, setAllAlbums] = useState<any>()
-    const [artist, setArtist] = useState<any>()
-    const [albumData, setAlbumData] = useState({
-        artists: artist,
+    const [userId, setUserId] = useState<any>()
+    const [typeRole, setTypeRole] = useState<any>()
+
+    const [albumEditData, setalbumEditData] = useState({
+        artists: '',
         nameAlbum: '',
         yearAlbum: ''
     });
-    const [userId, setUserId] = useState<any>()
-    const [typeRole, setTypeRole] = useState<any>()
+    const [edit, setEdit] = useState<boolean>(false)
     
     const page = Number(searchParams?.page) || 1;
     const limit = Number(searchParams?.limit) || 10;
     
     const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState<boolean>(false)
-    const [edit, setEdit] = useState<boolean>(false)
 
     // const [modalSucess, setModalSucess] = useState(false);
     // const [modalError, setModalError] = useState(false);
@@ -60,14 +60,12 @@ const Playlist = ({searchParams}:PageProps) => {
         if (session !== null && session !== undefined) {
             typeUser(session)
 
-            const fetchArtists = async () => {
+            const fetchAlbums = async () => {
                 const datasAlbums = await getAllAlbumsService(page, limit, userId);
                 setAllAlbums(datasAlbums?.albums);
-                const responseArtists = await getAllArtistsService();
-                setArtist(responseArtists)
             };
 
-            fetchArtists()
+            fetchAlbums()
         }
     }, [session])
 
@@ -143,7 +141,7 @@ const Playlist = ({searchParams}:PageProps) => {
                     total={2} // metadata.pagination.total
                 />
                 <FormPlaylist
-                    albumData={albumData}
+                    albumEditDatas={albumEditData}
                     openCard={openCardCreateAlbum}
                     editAlbum={edit}
                 />

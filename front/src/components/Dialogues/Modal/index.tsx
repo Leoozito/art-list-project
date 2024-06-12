@@ -6,7 +6,9 @@ const Modal = ({openModal,children}:any) => {
     const [modal, setModal] = useState(openModal);
 
     useEffect(() => {
-        setModal(openModal)
+        if (openModal) {
+            setModal(openModal)
+        }
     },[openModal])
 
     console.log(openModal, "and > ", modal)
