@@ -2,16 +2,15 @@ import Modal from "@/components/Dialogues/Modal";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
 import Button from "@/components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { AlbumAction } from '@/data/actions/albums-actions/playlist-actions';
-import { fetchWrapper } from '../../../app/functions/fetch'
 
 interface FormPlaylistProps {
     editAlbum: boolean
     openCard: boolean;
     albumData: { 
-        artist: string, 
+        artists: any, 
         nameAlbum: string, 
         yearAlbum: string 
     };
@@ -24,17 +23,22 @@ const INITIAL_STATE = {
 };
 
 const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumData, editAlbum, openCard }) => {
-    
-    const [artist, setArtist] = useState<any[]>([])
+    const [artist, setArtist] = useState<any>()
     const [nameAlbum, setNameAlbum] = useState("")
     const [yearAlbum, setYearAlbum] = useState("")
+
+    useEffect(() => {
+        setArtist(albumData?.artists)
+        setNameAlbum(albumData?.nameAlbum)
+        setYearAlbum(albumData?.yearAlbum)
+    }, [albumData])
 
     const [formState, formAction] = useFormState(
         AlbumAction,
         INITIAL_STATE
     );
 
-    console.log("YEAH TODOS OS DADOS DO ALBUM: ", albumData)
+    // console.log("YEAH TODOS OS DADOS DO ALBUM: ", albumData)
     
     return(
         <>
@@ -47,6 +51,8 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumData, editAlbum, openCa
                         className='space-y-10'
                     >
                         <Input
+                            onChange={(e:any) => setNameAlbum(e.target.value)}
+                            value={nameAlbum}
                             required={true}
                             label="Name of Album"
                             placeholder="Enter name of your album: "
@@ -61,6 +67,8 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumData, editAlbum, openCa
                             items={artist}         
                         />
                         <Input
+                            onChange={(value:any) => setYearAlbum(value)}
+                            value={yearAlbum}
                             required={true}
                             label="Year of Album"
                             placeholder="Enter year of your album: "
