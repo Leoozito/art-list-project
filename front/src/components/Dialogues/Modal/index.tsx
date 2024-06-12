@@ -11,8 +11,6 @@ const Modal = ({openModal,children}:any) => {
         }
     },[openModal])
 
-    console.log(openModal, "and > ", modal)
-
     const closeModal = () => {
         setModal(false)
     };

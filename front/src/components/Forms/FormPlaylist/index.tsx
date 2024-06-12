@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { AlbumAction } from '@/data/actions/albums-actions/playlist-actions';
-import { getAllArtistsService } from "@/data/services/album-services/playlist-service";
+import { getAllArtistsService, newAlbumService, editAlbumService } from "@/data/services/album-services/playlist-service";
 
 interface FormPlaylistProps {
     editAlbum: boolean
@@ -48,6 +48,8 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
         INITIAL_STATE
     );
 
+
+
     // console.log("YEAH TODOS OS DADOS DO ALBUM: ", albumEditDatas)
     
     return(
@@ -73,11 +75,14 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
 
                         />
                         <Select
+                            id="artists"
+                            name="artists"
+                            type="artists"
                             label="Artist of Album"
                             items={artist}         
                         />
                         <Input
-                            onChange={(value:any) => setYearAlbum(value)}
+                            onChange={(e:any) => setYearAlbum(e.target.value)}
                             value={yearAlbum}
                             required={true}
                             label="Year of Album"

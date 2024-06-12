@@ -1,7 +1,7 @@
 "use client"
 
 // services
-import { getAllAlbumsService, getAlbumByIdService, newAlbumService, editAlbumService, deleteAlbumService } from "@/data/services/album-services/playlist-service"
+import { getAllAlbumsService, getAlbumByIdService, deleteAlbumService } from "@/data/services/album-services/playlist-service"
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 // components

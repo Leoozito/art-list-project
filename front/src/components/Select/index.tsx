@@ -9,6 +9,9 @@ const Select = (props:any) => {
                 </label>
                 <select
                     {...props}
+                    type={props.type}
+                    id={props.id}
+                    name={props.name}
                     value={props.value}
                     required={props.required}
                     className="w-full rounded-md border-0 py-4 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:max-w-sm sm:text-lg sm:leading-6"
