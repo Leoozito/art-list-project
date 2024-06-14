@@ -71,17 +71,17 @@ const Playlist = ({searchParams}:PageProps) => {
         setOpenCardCreateAlbum(false)
     }, [openCardCreateAlbum])
 
-    // const getAlbumById = async (id:number) => {
-    //     try {
-    //         const data = await getAlbumByIdService(id);
+    const getAlbumById = async (id:number) => {
+        try {
+            const data = await getAlbumByIdService(id);
 
-    //         // setArtist(data.artist)
-    //         // setNameAlbum(data.name_album)
-    //         // setYearAlbum(data.year_album)
-    //     } catch (error:any) {
-    //         console.error(`Error when querying album data, ID: ${id}`,error);
-    //     }
-    // }
+            // setArtist(data.artist)
+            // setNameAlbum(data.name_album)
+            // setYearAlbum(data.year_album)
+        } catch (error:any) {
+            console.error(`Error when querying album data, ID: ${id}`,error);
+        }
+    }
     
     if (status === "loading") {
         return <div>Loading...</div>
@@ -125,16 +125,13 @@ const Playlist = ({searchParams}:PageProps) => {
                     />                                
                     <div className="mt-14 gap-12 grid sm:grid-cols-2 lg:grid-cols-3">
                         {allAlbums && allAlbums.map((album:any) => 
-                            {
-                                console.log(album)
-                                return(<AlbumCard
+                            <AlbumCard
                                 isAdm={typeRole}
                                 key={album.id}
-                                onDelete={() => deleteAlbumService(album.id)}
-                                // onClick={getAlbumById(album.id)}
-                                artist={album.artist}
-                                name_album={album.name_album}
-                                year_album={album.year_album}                            />)}
+                                // onDelete={() => deleteAlbumService(album.id)}
+                                onClick={() => getAlbumById(album.id)}
+                                albumDatas={album}                            
+                            />
                         )}
                     </div>
                     <Pagination
