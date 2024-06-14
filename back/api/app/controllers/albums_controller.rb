@@ -33,6 +33,8 @@ class AlbumsController < ApplicationController
 
   # POST /albums/create or /albums.json
   def create
+    Rails.logger.info "DADOS VINDO DO FRONT: #{album_params}"
+
     @album = Album.new(album_params)
 
     respond_to do |format|
@@ -72,6 +74,6 @@ class AlbumsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def album_params
-      params.require(:album).permit(:name_album, :year_album, :artist)
+      params.require(:album).permit(:name_album, :year_album, :artist, :user_id)
     end
 end

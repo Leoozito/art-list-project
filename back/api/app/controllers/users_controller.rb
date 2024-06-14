@@ -14,12 +14,9 @@ class UsersController < ApplicationController
 
   def login
     user_params = params.require(:user).permit(:email, :password)
-    Rails.logger.info "USUARIO PARAMS: #{user_params}"
 
     user = User.find_by(email: user_params[:email]).try(:authenticate, user_params[:password])
-    
-    Rails.logger.info "USUARIO: #{user}"
-    
+        
     if user
       token = encode_token({ user_id: user.id })
       session[:user_id] = user.id
