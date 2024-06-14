@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { fetchWrapper } from '../../../app/functions/fetch'
+import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface AlbumProps {
-    nameAlbum: string,
-    yearAlbum: string,
+    name_album: string,
+    year_album: string,
     artist: string,
-    user_id : number
 }
+
 
 async function getAllArtistsService() 
 {
@@ -31,19 +34,25 @@ async function getAllArtistsService()
     }
 }
 
-async function getAllAlbumsService(page:number, limit:number, user_id:number) 
+async function getAllAlbumsService(page:number, limit:number, session:any) 
 {
-    try {
-        const queryParams = new URLSearchParams({
-            page: page?.toString(),
-            limit: limit?.toString(),
-            user_id: user_id?.toString()
-        })?.toString();
+    const userId = session?.user?.id;
 
-        const response = await fetchWrapper(`/albums?${queryParams}`, {
-            method: 'GET',
-        });
-        return response;
+    try {
+        if (userId) {
+            const queryParams = new URLSearchParams({
+                page: page?.toString(),
+                limit: limit?.toString(),
+                user_id: userId?.toString()
+            })?.toString();
+
+            const response = await fetchWrapper(`/albums?${queryParams}`, {
+                method: 'GET',
+            });
+            return response;
+        } else {
+            return "Error when querying user data"
+        }
     } catch (error) {
         console.error('Error fetching albums: ', error);
     }

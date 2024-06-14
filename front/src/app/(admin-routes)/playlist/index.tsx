@@ -23,7 +23,6 @@ type PageProps = {
 const Playlist = ({searchParams}:PageProps) => {
     const { data: session, status } = useSession()
     const [allAlbums, setAllAlbums] = useState<any>()
-    const [userId, setUserId] = useState<any>()
     const [typeRole, setTypeRole] = useState<any>()
 
     const [albumEditData, setalbumEditData] = useState({
@@ -51,7 +50,6 @@ const Playlist = ({searchParams}:PageProps) => {
 
     const typeUser = async (session:any) => {
         if (session) {
-            setUserId(JSON.stringify(session?.user?.id))
             setTypeRole(JSON.stringify(session?.user?.role))
         }
     }
@@ -61,7 +59,7 @@ const Playlist = ({searchParams}:PageProps) => {
             typeUser(session)
 
             const fetchAlbums = async () => {
-                const datasAlbums = await getAllAlbumsService(page, limit, userId);
+                const datasAlbums = await getAllAlbumsService(page, limit, session);
                 setAllAlbums(datasAlbums?.albums);
             };
 
@@ -120,32 +118,37 @@ const Playlist = ({searchParams}:PageProps) => {
                     iconColor="#ef4444"
                 />                                  
             )} */}
-            <CardLayout>
-                <CardCreateAlbum 
-                    onClick={() => setOpenCardCreateAlbum  (!openCardCreateAlbum)}
-                />                                
-                <div className="mt-14 gap-12 grid sm:grid-cols-2 lg:grid-cols-3">
-                    {allAlbums && allAlbums.map((album:any) =>                        
-                        <AlbumCard
-                            isAdm={typeRole}
-                            key={album.id}
-                            onDelete={() => deleteAlbumService(album.id)}
-                            // onClick={getAlbumById(album.id)}
-                            albumDatas={album}
-                        />
-                    )}
-                </div>
-                <Pagination
-                    page={page}
-                    limit={limit}
-                    total={2} // metadata.pagination.total
-                />
-                <FormPlaylist
-                    albumEditDatas={albumEditData}
-                    openCard={openCardCreateAlbum}
-                    editAlbum={edit}
-                />
-            </CardLayout>
+            {(session !== null && session !== undefined) && (
+                <CardLayout>
+                    <CardCreateAlbum 
+                        onClick={() => setOpenCardCreateAlbum  (!openCardCreateAlbum)}
+                    />                                
+                    <div className="mt-14 gap-12 grid sm:grid-cols-2 lg:grid-cols-3">
+                        {allAlbums && allAlbums.map((album:any) => 
+                            {
+                                console.log(album)
+                                return(<AlbumCard
+                                isAdm={typeRole}
+                                key={album.id}
+                                onDelete={() => deleteAlbumService(album.id)}
+                                // onClick={getAlbumById(album.id)}
+                                artist={album.artist}
+                                name_album={album.name_album}
+                                year_album={album.year_album}                            />)}
+                        )}
+                    </div>
+                    <Pagination
+                        page={page}
+                        limit={limit}
+                        total={2} // metadata.pagination.total
+                    />
+                    <FormPlaylist
+                        albumEditDatas={albumEditData}
+                        openCard={openCardCreateAlbum}
+                        editAlbum={edit}
+                    />
+                </CardLayout>
+            )}
         </>    
     )
 }
