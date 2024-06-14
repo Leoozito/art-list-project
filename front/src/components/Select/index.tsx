@@ -1,4 +1,5 @@
-const Select = (props:any) => {
+const Select = (props:any, {...rest}:any) => {
+
     return(
         <>
             <div className="flex-col w-full">
@@ -8,9 +9,10 @@ const Select = (props:any) => {
                     {props.label}
                 </label>
                 <select
-                    {...props}
+                    {...rest}
                     type={props.type}
                     id={props.id}
+                    onChange={props.onChange}
                     name={props.name}
                     value={props.value}
                     required={props.required}
@@ -19,6 +21,7 @@ const Select = (props:any) => {
                     {props.items && props.items.map((items:any) =>
                         <option
                             key={items}
+                            value={items}
                         >
                             {items}
                         </option>

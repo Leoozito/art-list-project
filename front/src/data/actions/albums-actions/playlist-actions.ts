@@ -3,16 +3,18 @@ import * as z from 'zod';
 import {newAlbumService} from "../../services/album-services/playlist-service";
 
 const AlbumSchema = z.object({
-    nameAlbum: z.string()
+    name_album: z.string()
     .min(1, { message: "This field is required" }),
-    yearAlbum: z.string()
+    year_album: z.string()
     .min(1, { message: "This field is required" }),
 })
 
-export async function AlbumAction(prevState: any, formData: FormData) {
+export async function AlbumAction(session:any ,prevState: any, formData: FormData) {
+    const userId = session?.user?.id
+    console.log(formData)
     const validatedFields = AlbumSchema.safeParse({
-        nameAlbum: formData.get("nameAlbum"),
-        yearAlbum: formData.get("yearAlbum"),
+        name_album: formData.get("nameAlbum"),
+        year_album: formData.get("yearAlbum"),
     });
   
     if (!validatedFields.success) {
@@ -26,14 +28,14 @@ export async function AlbumAction(prevState: any, formData: FormData) {
 
     const additionalData = {
       artist: String(formData.get("artist")),
-      user_id: Number(formData.get("user_id"))
+      user_id: userId
     }
 
     const albumData = {
       ...validatedFields.data,
       ...additionalData
     };
-  
+    console.log("DADOS POST>", albumData)
     await newAlbumService(albumData)
   
 }

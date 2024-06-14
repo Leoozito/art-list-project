@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { AlbumAction } from '@/data/actions/albums-actions/playlist-actions';
 import { getAllArtistsService, newAlbumService, editAlbumService } from "@/data/services/album-services/playlist-service";
+import { useSession } from "next-auth/react";
 
 interface FormPlaylistProps {
     editAlbum: boolean
@@ -24,6 +25,8 @@ const INITIAL_STATE = {
 };
 
 const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, openCard }) => {
+    const { data: session } = useSession()
+    const [allArtist, setAllArtist] = useState<any>()
     const [artist, setArtist] = useState<any>()
     const [nameAlbum, setNameAlbum] = useState("")
     const [yearAlbum, setYearAlbum] = useState("")
@@ -37,21 +40,18 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
     useEffect(() => {
         const fetchArtists = async () => {
             const responseArtists = await getAllArtistsService();
-            setArtist(responseArtists)
+            setAllArtist(responseArtists)
         }
 
         fetchArtists()
     }, [])
 
     const [formState, formAction] = useFormState(
-        AlbumAction,
+        (prevState:any, formData:FormData) => 
+        AlbumAction(session, prevState, formData),
         INITIAL_STATE
     );
 
-
-
-    // console.log("YEAH TODOS OS DADOS DO ALBUM: ", albumEditDatas)
-    
     return(
         <>
             <Modal
@@ -75,11 +75,13 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
 
                         />
                         <Select
-                            id="artists"
-                            name="artists"
-                            type="artists"
+                            id="artist"
+                            name="artist"
+                            type="artist"
                             label="Artist of Album"
-                            items={artist}         
+                            items={allArtist}
+                            value={artist}
+                            onChange={(e:any) => setArtist(e.target.value)}
                         />
                         <Input
                             onChange={(e:any) => setYearAlbum(e.target.value)}
