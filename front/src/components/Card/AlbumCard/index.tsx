@@ -17,8 +17,6 @@ interface AlbumCardProps {
 
 const AlbumCard: React.FC<AlbumCardProps> = ({ albumDatas }, {key, onClick, isAdm}:any) => {
 
-    console.log("dados: ", albumDatas)
-
     return(
         <>
             <CardLayout
