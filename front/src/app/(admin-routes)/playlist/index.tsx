@@ -11,10 +11,6 @@ import CardLayout from "@/components/Card/CardLayout";
 import AlertDialog from "@/components/Dialogues/AlertDialog";
 import Pagination from '@/components/Pagination'
 import CardCreateAlbum from "@/components/Card/CardCreateAlbum";
-// Icons
-import { LuAlertTriangle } from "react-icons/lu";
-import { FaRegCircleCheck } from "react-icons/fa6";
-import { FaRegRectangleXmark } from "react-icons/fa6";
 
 type PageProps = {
 	searchParams?: {page?:string, limit?:string}
@@ -37,16 +33,13 @@ const Playlist = ({searchParams}:PageProps) => {
     
     const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState<boolean>(false)
 
-    // const [modalSucess, setModalSucess] = useState(false);
-    // const [modalError, setModalError] = useState(false);
-    // const [modalAlert, setModalAlert] = useState(false);
-    // const [modalConteudo, setModalConteudo] = useState("")
-
-    // const closeModal = () => {
-    //     setModalSucess(false)
-    //     setModalError(false)
-    //     setModalAlert(false)
-    // }
+    const [modalSucess, setModalSucess] = useState(false);
+    const [modalError, setModalError] = useState(false);
+    const [modalAlert, setModalAlert] = useState(false);
+    const [modalConteudo, setModalConteudo] = useState({
+        title: '',
+        description: ''
+    })
 
     const typeUser = async (session:any) => {
         if (session) {
@@ -89,35 +82,12 @@ const Playlist = ({searchParams}:PageProps) => {
 
     return(
         <>
-            {/* {!modalSucess && (
-                <AlertDialog
-                    onClose={closeModal}
-                    conteudo={modalConteudo}
-                    openModal={modalSucess}
-                    icon={<FaRegCircleCheck/>}
-                    iconColor="#16a34a"
-                />
-            )}
-            {modalAlert && (
-                <AlertDialog
-                    onClose={closeModal}
-                    title="Alerta"
-                    conteudo={modalConteudo}
-                    openModal={modalAlert}
-                    icon={<LuAlertTriangle/>}
-                    iconColor="#facc15"
-                />
-            )}
-            {modalError && (
-                <AlertDialog
-                    onClose={closeModal}
-                    title="Erro ao efetuar o registro"
-                    conteudo={modalConteudo}
-                    openModal={modalError}
-                    icon={<FaRegRectangleXmark/>}
-                    iconColor="#ef4444"
-                />                                  
-            )} */}
+            <AlertDialog
+                content={modalConteudo}
+                sucess={modalSucess}
+                alert={modalAlert}
+                error={modalError}
+            />
             {(session !== null && session !== undefined) && (
                 <CardLayout>
                     <CardCreateAlbum 

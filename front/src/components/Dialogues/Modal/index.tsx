@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { RiCloseCircleLine } from "react-icons/ri";
 
-const Modal = ({openModal,children}:any) => {
+const Modal = ({openModal, children}:any) => {
 
     const [modal, setModal] = useState(openModal);
 
