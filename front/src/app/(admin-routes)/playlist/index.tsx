@@ -11,7 +11,6 @@ import CardLayout from "@/components/Card/CardLayout";
 import AlertDialog from "@/components/Dialogues/AlertDialog";
 import Pagination from '@/components/Pagination'
 import CardCreateAlbum from "@/components/Card/CardCreateAlbum";
-import ConfirmAlertDialog from "@/components/Dialogues/ConfirmAlertDialog";
 
 type PageProps = {
 	searchParams?: {page?:string, limit?:string}
@@ -34,9 +33,6 @@ const Playlist = ({searchParams}:PageProps) => {
     
     const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState<boolean>(false)
 
-    const [modalConfirmSucess, setModalConfirmSucess] = useState(false);
-    const [modalConfirmError, setModalConfirmError] = useState(false);
-    const [modalConfirmAlert, setModalConfirmAlert] = useState(false);
     const [modalSucess, setModalSucess] = useState(false);
     const [modalError, setModalError] = useState(false);
     const [modalAlert, setModalAlert] = useState(false);
@@ -92,12 +88,6 @@ const Playlist = ({searchParams}:PageProps) => {
                 sucess={modalSucess}
                 alert={modalAlert}
                 error={modalError}
-            />
-            <ConfirmAlertDialog
-                content={modalConteudo}
-                sucess={modalConfirmSucess}
-                alert={modalConfirmAlert}
-                error={modalConfirmError}
             />
             {(session !== null && session !== undefined) && (
                 <CardLayout>

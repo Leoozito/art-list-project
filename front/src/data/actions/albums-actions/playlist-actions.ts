@@ -11,7 +11,7 @@ const AlbumSchema = z.object({
 
 export async function AlbumAction(session:any ,prevState: any, formData: FormData) {
     const userId = session?.user?.id
-    console.log(formData)
+    console.log("DADOOSSS",formData)
     const validatedFields = AlbumSchema.safeParse({
         name_album: formData.get("nameAlbum"),
         year_album: formData.get("yearAlbum"),
