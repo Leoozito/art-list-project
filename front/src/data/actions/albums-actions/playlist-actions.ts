@@ -11,7 +11,6 @@ const AlbumSchema = z.object({
 
 export async function AlbumAction(session:any ,prevState: any, formData: FormData) {
     const userId = session?.user?.id
-    console.log("DADOOSSS",formData)
     const validatedFields = AlbumSchema.safeParse({
         name_album: formData.get("nameAlbum"),
         year_album: formData.get("yearAlbum"),
@@ -35,7 +34,6 @@ export async function AlbumAction(session:any ,prevState: any, formData: FormDat
       ...validatedFields.data,
       ...additionalData
     };
-    console.log("DADOS POST>", albumData)
     await newAlbumService(albumData)
   
 }
