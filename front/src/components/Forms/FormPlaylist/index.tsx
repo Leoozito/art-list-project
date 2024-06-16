@@ -39,7 +39,6 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
     const [modalConfirmAlert, setModalConfirmAlert] = useState(false);
     const [modalSucess, setModalSucess] = useState(false);
     const [modalError, setModalError] = useState(false);
-    const [modalAlert, setModalAlert] = useState(false);
     const [modalConteudo, setModalConteudo] = useState({
         title: '',
         description: ''
@@ -92,12 +91,16 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
 
             await formAction(formData);
             setModalConteudo({
-                title: 'Sucesso',
-                description: 'Album novo criado'
+                title: 'Successfully create new album',
+                description: ''
             });
             setModalSucess(true)
         } catch (error) {
-            console.error("DEU RUIM>>>>>>>>>> ", error)
+            setModalConteudo({
+                title: 'Error creating new album',
+                description: `${error}`
+            });
+            setModalError(true)
         }
     };
 
@@ -118,6 +121,7 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
                 sucess={modalSucess}
                 error={modalError}
             />
+
             <Modal
                 openModal={cardForm}
             >
