@@ -18,29 +18,33 @@ const AlertDialog = ({children, content, alert, sucess, error}:any) => {
     }, [sucess, alert, error])
 
     return (
-        <>
-            <Modal openModal={openModal}>
-                <div className="flex-col flex items-center justify-center">
-                    <div className={`text-center rounded-full flex justify-center items-center`}>
-                        {sucess &&(
-                            <><FaRegCircleCheck className="text-5xl text-[#16a34a]"/></>
-                        )}
-                        {alert &&(
-                            <><LuAlertTriangle className="text-5xl text-[#facc15]"/></>
-                        )}
-                        {error &&(
-                            <><FaRegRectangleXmark className="text-5xl text-[#ef4444]"/></>
-                        )}
-                    </div>
-                    <div className="mt-3 text-center sm:ml-4 sm:mt-0">
-                        <h3 className="mt-4 sm:text-sm lg:text-lg font-semibold leading-6 text-gray-900" id="modal-title ">{content.title}</h3>
-                        <div className="mt-2">
-                            <p className="sm:text-left sm:text-sm lg:text-lg text-gray-500">{content.description}</p>
+        <>        
+        {openModal && (      
+            <div className="relative z-50">
+                <Modal openModal={openModal}>
+                    <div className="flex-col flex items-center justify-center">
+                        <div className={`text-center rounded-full flex justify-center items-center`}>
+                            {sucess &&(
+                                <><FaRegCircleCheck className="text-5xl text-[#16a34a]"/></>
+                            )}
+                            {alert &&(
+                                <><LuAlertTriangle className="text-5xl text-[#facc15]"/></>
+                            )}
+                            {error &&(
+                                <><FaRegRectangleXmark className="text-5xl text-[#ef4444]"/></>
+                            )}
+                        </div>
+                        <div className="mt-3 text-center sm:ml-4 sm:mt-0">
+                            <h3 className="mt-4 sm:text-sm lg:text-lg font-semibold leading-6 text-gray-900" id="modal-title ">{content.title}</h3>
+                            <div className="mt-2">
+                                <p className="sm:text-left sm:text-sm lg:text-lg text-gray-500">{content.description}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                {children}
-            </Modal>
+                    {children}
+                </Modal>
+            </div>
+        )}
         </>
     )
 }

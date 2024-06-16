@@ -14,7 +14,7 @@ interface FormPlaylistProps {
     editAlbum: boolean
     openCard: boolean;
     albumEditDatas: { 
-        artists: any, 
+        artist: any, 
         nameAlbum: string, 
         yearAlbum: string 
     };
@@ -52,7 +52,7 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
     },[openCard])
 
     useEffect(() => {
-        setArtist(albumEditDatas?.artists)
+        setArtist(albumEditDatas?.artist)
         setNameAlbum(albumEditDatas?.nameAlbum)
         setYearAlbum(albumEditDatas?.yearAlbum)
     }, [albumEditDatas && editAlbum])
@@ -78,22 +78,26 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
             title: 'Criar novo álbum',
             description: 'Deseja prosseguir na criação de um novo álbum?'
         });
+        setCardForm(false)
         setModalConfirmAlert(true);
     };
 
     const handleConfirm = async () => {
-        setCardForm(false)
         setModalConfirmAlert(false);
         try {
-            // const response = await formAction();
-            // console.log(response)
+            const formData = new FormData();
+            formData.append('nameAlbum', nameAlbum);
+            formData.append('yearAlbum', yearAlbum);
+            formData.append('artist', artist);
+
+            await formAction(formData);
             setModalConteudo({
                 title: 'Sucesso',
                 description: 'Album novo criado'
             });
             setModalSucess(true)
         } catch (error) {
-            // console.error("DEU RUIM>>>>>>>>>> ", error)
+            console.error("DEU RUIM>>>>>>>>>> ", error)
         }
     };
 
