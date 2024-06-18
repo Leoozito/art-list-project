@@ -18,8 +18,7 @@ export default async function loginUserService(userDatas: LoginUserProps) {
     })
 
     if (response?.error) {
-        console.log(response)
-        return
+        return response
     }
 
     return response;

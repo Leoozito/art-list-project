@@ -1,15 +1,10 @@
-import { useState } from 'react';
 import { fetchWrapper } from '../../../app/functions/fetch'
-import { useSession } from "next-auth/react";
-import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface AlbumProps {
     name_album: string,
     year_album: string,
     artist: string,
 }
-
 
 async function getAllArtistsService() 
 {
@@ -30,7 +25,7 @@ async function getAllArtistsService()
         }
         return AllArtistNames
     } catch (error) {
-        console.error('Error fetching artists: ', error);
+        return error;
     }
 }
 
@@ -54,7 +49,7 @@ async function getAllAlbumsService(page:number, limit:number, session:any)
             return "Error when querying user data"
         }
     } catch (error) {
-        console.error('Error fetching albums: ', error);
+        return error;
     }
 }
 
@@ -66,10 +61,9 @@ async function getAlbumByIdService(id:number)
         });
         return response;
     } catch (error) {
-        console.error('Error fetching albums: ', error);
+        return error;
     }
 }
-
 
 async function newAlbumService(albumDatas: AlbumProps) 
 {    
@@ -92,9 +86,8 @@ async function editAlbumService(id:number, albumDatas: AlbumProps)
         });
         return response
     } catch (error) {
-        console.error('Error editing album: ', error);
+        return error;
     }
-
 }
 
 async function deleteAlbumService(id:number) 
@@ -105,9 +98,8 @@ async function deleteAlbumService(id:number)
         });
         return response
     } catch (error) {
-        console.error('Error delete album: ', error);
+        return error;
     }
-
 }
 
 export { getAllArtistsService, getAllAlbumsService, getAlbumByIdService, newAlbumService, editAlbumService, deleteAlbumService };

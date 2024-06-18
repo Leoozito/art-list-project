@@ -32,6 +32,11 @@ const Playlist = ({searchParams}:PageProps) => {
     const limit = Number(searchParams?.limit) || 10;
     
     const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState<boolean>(false)
+    const [alertContent, setAlertContent] = useState({
+        title: '',
+        description: ''
+    })
+    const [errorDialog, setErrorDialog] = useState<boolean>(false)
 
     const typeUser = async (session:any) => {
         if (session) {
@@ -60,11 +65,13 @@ const Playlist = ({searchParams}:PageProps) => {
         try {
             const data = await getAlbumByIdService(id);
 
-            // setArtist(data.artist)
-            // setNameAlbum(data.name_album)
-            // setYearAlbum(data.year_album)
+            // console.log(data)
         } catch (error:any) {
-            console.error(`Error when querying album data, ID: ${id}`,error);
+            setAlertContent({
+                title: `Error when querying album data, ID: ${id}`,
+                description: `${error}`
+            });
+            setErrorDialog(true)
         }
     }
     
@@ -74,6 +81,10 @@ const Playlist = ({searchParams}:PageProps) => {
 
     return(
         <>
+            <AlertDialog
+                content={alertContent}
+                error={errorDialog}
+            />
             <CardLayout>
                 <CardCreateAlbum 
                     onClick={() => setOpenCardCreateAlbum  (!openCardCreateAlbum)}
