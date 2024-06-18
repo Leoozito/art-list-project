@@ -36,10 +36,10 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
     const [yearAlbum, setYearAlbum] = useState("")
 
     const [cardForm, setCardForm] = useState(openCard);
-    const [modalConfirmAlert, setModalConfirmAlert] = useState(false);
-    const [modalSucess, setModalSucess] = useState(false);
-    const [modalError, setModalError] = useState(false);
-    const [modalConteudo, setModalConteudo] = useState({
+    const [confirmDialogAlert, setConfirmDialogAlert] = useState(false);
+    const [sucessDialog, setSucessDialog] = useState(false);
+    const [errorDialog, setErrorDialog] = useState(false);
+    const [contentDialog, setContentDialog] = useState({
         title: '',
         description: ''
     })
@@ -73,15 +73,16 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
 
     const handleSubmit = (e:any) => {
         e.preventDefault(); 
-        setModalConteudo({
-            title: 'Criar novo álbum',
-            description: 'Deseja prosseguir na criação de um novo álbum?'
+        setContentDialog({
+            title: editAlbum ? 'Edit album' :'Create new álbum',
+            description: editAlbum ? 'Do you want to edit this album? By clicking "Send" you will edit the album' : 'Do you want to continue creating a new album? By clicking "Send" you will create a new album'
         });
-        setModalConfirmAlert(true);
+        setConfirmDialogAlert(true);
     };
 
     const handleConfirm = async () => {
-        setModalConfirmAlert(false);
+        setConfirmDialogAlert(false);
+
         try {
             const formData = new FormData();
             formData.append('nameAlbum', nameAlbum);
@@ -90,22 +91,22 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
 
             await formAction(formData);
             setCardForm(false)
-            setModalConteudo({
-                title: 'Successfully create new album',
-                description: ''
+            setContentDialog({
+                title: editAlbum ? 'Successfully edit album' : 'Successfully create new album',
+                description: `Album ${nameAlbum} ${editAlbum ? 'edited' : 'created'}`
             });
-            setModalSucess(true)
+            setSucessDialog(true)
         } catch (error) {
-            setModalConteudo({
-                title: 'Error creating new album',
+            setContentDialog({
+                title: editAlbum ? '' : 'Error creating new album',
                 description: `${error}`
             });
-            setModalError(true)
+            setErrorDialog(true)
         }
     };
 
     const handleCancel = () => {
-        setModalConfirmAlert(false);
+        setConfirmDialogAlert(false);
     };
 
     return(
@@ -113,13 +114,13 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
             <ConfirmAlertDialog
                 actionConfirm={handleConfirm}
                 actionCancel={handleCancel}
-                content={modalConteudo}
-                alert={modalConfirmAlert}
+                content={contentDialog}
+                alert={confirmDialogAlert}
             />
             <AlertDialog
-                content={modalConteudo}
-                sucess={modalSucess}
-                error={modalError}
+                content={contentDialog}
+                sucess={sucessDialog}
+                error={errorDialog}
             />
 
             <Modal
@@ -141,7 +142,6 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
                             name="nameAlbum"
                             type="nameAlbum"
                             error={formState?.zodErrors?.nameAlbum}
-
                         />
                         <Select
                             id="artist"
