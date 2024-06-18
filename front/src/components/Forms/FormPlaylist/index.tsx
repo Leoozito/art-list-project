@@ -77,7 +77,6 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
             title: 'Criar novo álbum',
             description: 'Deseja prosseguir na criação de um novo álbum?'
         });
-        setCardForm(false)
         setModalConfirmAlert(true);
     };
 
@@ -90,6 +89,7 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
             formData.append('artist', artist);
 
             await formAction(formData);
+            setCardForm(false)
             setModalConteudo({
                 title: 'Successfully create new album',
                 description: ''

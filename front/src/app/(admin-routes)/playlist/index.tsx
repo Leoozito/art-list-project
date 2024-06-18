@@ -78,7 +78,7 @@ const Playlist = ({searchParams}:PageProps) => {
                 <CardCreateAlbum 
                     onClick={() => setOpenCardCreateAlbum  (!openCardCreateAlbum)}
                 />                                
-                <div className="mt-14 gap-12 grid sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-14 px-10 gap-12 grid sm:grid-cols-2 lg:grid-cols-3">
                     {allAlbums && allAlbums.map((album:any) => 
                         <AlbumCard
                             isAdm={typeRole}
@@ -94,11 +94,13 @@ const Playlist = ({searchParams}:PageProps) => {
                     limit={limit}
                     total={2} // metadata.pagination.total
                 />
-                <FormPlaylist
-                    albumEditDatas={albumEditData}
-                    openCard={openCardCreateAlbum}
-                    editAlbum={edit}
-                />
+                {openCardCreateAlbum && (
+                    <FormPlaylist
+                        albumEditDatas={albumEditData}
+                        openCard={openCardCreateAlbum}
+                        editAlbum={edit}
+                    />
+                )}
             </CardLayout>
         </>    
     )
