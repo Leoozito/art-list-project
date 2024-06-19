@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 const Input = ({id, value, label, type, name, error, ...rest }:any ) => {
 
     return(

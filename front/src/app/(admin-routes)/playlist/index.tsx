@@ -30,6 +30,7 @@ const Playlist = ({searchParams}:PageProps) => {
     
     const page = Number(searchParams?.page) || 1;
     const limit = Number(searchParams?.limit) || 10;
+    const [metadata, setMetadata] = useState<number>(0)
     
     const [openCardCreateAlbum, setOpenCardCreateAlbum] = useState<boolean>(false)
     const [alertContent, setAlertContent] = useState({
@@ -51,6 +52,7 @@ const Playlist = ({searchParams}:PageProps) => {
             const fetchAlbums = async () => {
                 const datasAlbums = await getAllAlbumsService(page, limit, session);
                 setAllAlbums(datasAlbums?.albums);
+                setMetadata(datasAlbums?.metadata?.total_count)
             };
 
             fetchAlbums()
@@ -62,6 +64,7 @@ const Playlist = ({searchParams}:PageProps) => {
     }, [openCardCreateAlbum])
 
     const getAlbumById = async (id:number) => {
+        // console.log("ALBUM,", id)
         try {
             const data = await getAlbumByIdService(id);
 
@@ -89,13 +92,12 @@ const Playlist = ({searchParams}:PageProps) => {
                 <CardCreateAlbum 
                     onClick={() => setOpenCardCreateAlbum  (!openCardCreateAlbum)}
                 />                                
-                <div className="mt-14 px-10 gap-12 grid sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-14 px-10 gap-12 grid md:grid-cols-2 lg:grid-cols-3">
                     {allAlbums && allAlbums.map((album:any) => 
                         <AlbumCard
                             isAdm={typeRole}
                             key={album.id}
-                            // onDelete={() => deleteAlbumService(album.id)}
-                            onClick={() => getAlbumById(album.id)}
+                            onEditClick={() => getAlbumById(album.id)}
                             albumDatas={album}                            
                         />
                     )}
@@ -103,7 +105,7 @@ const Playlist = ({searchParams}:PageProps) => {
                 <Pagination
                     page={page}
                     limit={limit}
-                    total={2} // metadata.pagination.total
+                    total={metadata}
                 />
                 {openCardCreateAlbum && (
                     <FormPlaylist
