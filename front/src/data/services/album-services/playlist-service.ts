@@ -59,6 +59,7 @@ async function getAlbumByIdService(id:number)
         const response = await fetchWrapper(`/albums/${id}`, {
             method: 'GET',
         });
+        console.log("RESPOSTA",response)
         return response;
     } catch (error) {
         return error;

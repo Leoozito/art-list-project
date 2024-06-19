@@ -1,6 +1,7 @@
 import CardLayout from "../CardLayout";
 import { PiMusicNotesFill } from "react-icons/pi";
 import { MdOutlineDeleteForever } from "react-icons/md";
+import { FaPenToSquare } from "react-icons/fa6";
 
 interface AlbumDatas {
     artist: string,
@@ -11,47 +12,54 @@ interface AlbumDatas {
 interface AlbumCardProps {
     albumDatas: AlbumDatas;
     key: string | number;
-    onClick: () => void;
+    onEditClick: any;
     isAdm: boolean;
 }
 
-const AlbumCard: React.FC<AlbumCardProps> = ({ albumDatas }, {key, onClick, isAdm}:any) => {
+const AlbumCard: React.FC<AlbumCardProps> = ({ albumDatas, key, onEditClick, isAdm }) => {
+
+    console.log("OLAAAAA", onEditClick)
 
     return(
         <>
             <CardLayout
                 key={key}
-                onClick={onClick} 
-                style={{ cursor: 'pointer' }}
             >
-                <div className="p-2 flex items-center">
-                    <div className="flex-col sm:justify-center items-center leading-normal overflow-hidden ">
+                <div className="p-2 flex flex-col items-center">
+                    <div className="sm:flex-col sm:justify-center items-center flex">
+                        <p className="mb-4 text-lg font-bold tracking-tight text-orange-600 dark:text-white capitalize flex break-words max-w-sm">Album name: {albumDatas.name_album}</p>
+                    </div>
+                    <div className="items-center flex xl:flex-row sm:flex-col overflow-hidden sm:justify-center gap-12">
                         <div className="items-center flex">
-                            <p className="mb-4 text-lg font-bold tracking-tight text-orange-600 dark:text-white capitalize flex break-words max-w-sm">Album name: {albumDatas.name_album}</p>
+                            <PiMusicNotesFill className="text-orange-700 text-center font-extrabold text-5xl"/>
                         </div>
-                        <div className="items-center flex overflow-hidden">
-                            <div className="flex-1 items-center flex">
-                                <PiMusicNotesFill className="text-orange-700 text-center font-extrabold text-6xl" size={48}/>
+                        <div className="flex-col items-center">
+                            <div className="text-gray-700 break-words max-w-sm text-lg flex items-center space-x-2">
+                                <p className="font-bold">Artist:</p>
+                                <p>{albumDatas.artist}</p>
                             </div>
-
-                            <div className="flex-1 flex items-center">
-                                <div className="text-gray-700 break-words max-w-sm text-lg flex items-center">
-                                    <p className="font-bold mr-2">Artist:</p>
-                                    <p>{albumDatas.artist}</p>
-                                </div>
-                                
-                                <div className="text-gray-700 break-words max-w-sm text-lg flex items-center">
-                                    <p className="font-bold mr-2"> Year of release: </p>
-                                    <p className="">{albumDatas.year_album}</p>
-                                </div>
+            
+                            <div className="text-gray-700 break-words max-w-sm text-lg flex items-center space-x-2">
+                                <p className="font-bold"> Year of release: </p>
+                                <p className="">{albumDatas.year_album}</p>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="items-center mt-1 gap-8 flex justify-end">
                     {isAdm && (
-                        <MdOutlineDeleteForever 
-                            className="text-3xl text-red-700 text-center font-extrabold mr-8"
-                        />
+                        <div className="bg-red-700/20 text-3xl rounded-full">
+                            <MdOutlineDeleteForever
+                                className="text-red-700 text-center font-extrabold cursor-pointer placeholder m-2"
+                            />
+                        </div>
                     )}
+                    <div className="bg-indigo-700/20 rounded-full">
+                        <FaPenToSquare
+                            onClick={onEditClick}
+                            className="text-indigo-700 text-2xl text-center font-extrabold cursor-pointer placeholder m-2"
+                        />
+                    </div>
                 </div>
             </CardLayout>
         </>
