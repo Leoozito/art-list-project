@@ -1,6 +1,6 @@
 "use client"
 import * as z from 'zod';
-import {newAlbumService} from "../../services/album-services/playlist-service";
+import {newAlbumService, editAlbumService} from "../../services/album-services/playlist-service";
 
 const AlbumSchema = z.object({
     name_album: z.string()
@@ -9,8 +9,9 @@ const AlbumSchema = z.object({
     .min(1, { message: "This field is required" }),
 })
 
-export async function AlbumAction(session:any ,prevState: any, formData: FormData) {
-    const userId = session?.user?.id
+export async function AlbumAction(userId:number | undefined, editAlbum:boolean, prevState: any, formData: FormData) {
+    console.log("DADOS: ", formData, "id: ", userId, )
+    const user_id = userId
     const validatedFields = AlbumSchema.safeParse({
         name_album: formData.get("nameAlbum"),
         year_album: formData.get("yearAlbum"),
@@ -27,13 +28,17 @@ export async function AlbumAction(session:any ,prevState: any, formData: FormDat
 
     const additionalData = {
       artist: String(formData.get("artist")),
-      user_id: userId
+      user_id: user_id
     }
 
     const albumData = {
       ...validatedFields.data,
       ...additionalData
     };
-    await newAlbumService(albumData)
-  
+
+    if (editAlbum) {
+      await editAlbumService(0, albumData)
+    } else {
+      await newAlbumService(albumData)
+    }
 }

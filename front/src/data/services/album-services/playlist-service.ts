@@ -1,6 +1,7 @@
 import { fetchWrapper } from '../../../app/functions/fetch'
 
 interface AlbumProps {
+    user_id: number | undefined,
     name_album: string,
     year_album: string,
     artist: string,
@@ -59,7 +60,6 @@ async function getAlbumByIdService(id:number)
         const response = await fetchWrapper(`/albums/${id}`, {
             method: 'GET',
         });
-        console.log("RESPOSTA",response)
         return response;
     } catch (error) {
         return error;
@@ -79,7 +79,7 @@ async function newAlbumService(albumDatas: AlbumProps)
     return response.json
 }
 
-async function editAlbumService(id:number, albumDatas: AlbumProps) 
+async function editAlbumService(id:number | undefined, albumDatas: AlbumProps) 
 {
     try {
         const response = await fetchWrapper(`/update/${id}`, {
