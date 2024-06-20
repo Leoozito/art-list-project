@@ -13,12 +13,9 @@ interface AlbumCardProps {
     albumDatas: AlbumDatas;
     key: string | number;
     onEditClick: any;
-    isAdm: boolean;
 }
 
-const AlbumCard: React.FC<AlbumCardProps> = ({ albumDatas, key, onEditClick, isAdm }) => {
-
-    console.log("OLAAAAA", onEditClick)
+const AlbumCard: React.FC<AlbumCardProps> = ({ albumDatas, key, onEditClick }) => {
 
     return(
         <>
@@ -47,17 +44,15 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumDatas, key, onEditClick, isA
                     </div>
                 </div>
                 <div className="items-center mt-1 gap-8 flex justify-end">
-                    {isAdm && (
-                        <div className="bg-red-700/20 text-3xl rounded-full">
-                            <MdOutlineDeleteForever
-                                className="text-red-700 text-center font-extrabold cursor-pointer placeholder m-2"
-                            />
-                        </div>
-                    )}
+                    <div className="bg-red-700/20 text-3xl rounded-full">
+                        <MdOutlineDeleteForever
+                            className="text-red-700 text-center font-extrabold cursor-pointer placeholder m-2"
+                        />
+                    </div>
                     <div className="bg-indigo-700/20 rounded-full">
                         <FaPenToSquare
                             onClick={onEditClick}
-                            className="text-indigo-700 text-2xl text-center font-extrabold cursor-pointer placeholder m-2"
+                            className="text-indigo-700 text-2xl text-center font-extrabold cursor-pointer placeholder m-3"
                         />
                     </div>
                 </div>

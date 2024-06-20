@@ -8,12 +8,13 @@ import { AlbumAction } from '@/data/actions/albums-actions/playlist-actions';
 import { getAllArtistsService } from "@/data/services/album-services/playlist-service";
 import ConfirmAlertDialog from "@/components/Dialogues/ConfirmAlertDialog";
 import AlertDialog from "@/components/Dialogues/AlertDialog";
-import { useSession } from "next-auth/react";
 
 interface FormPlaylistProps {
-    editAlbum: boolean
+    userId: number | undefined,
+    editAlbum: boolean;
     openCard: boolean;
     albumEditDatas: { 
+        idAlbum: number,
         artist: any, 
         nameAlbum: string, 
         yearAlbum: string 
@@ -26,8 +27,9 @@ const INITIAL_STATE = {
     message: null,
 };
 
-const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, openCard }) => {
-    const { data: session } = useSession()
+// Form to create and edit albums
+
+const FormPlaylist:React.FC<FormPlaylistProps> = ({userId ,albumEditDatas, editAlbum, openCard }) => {
     const formRef = useRef(null);
     const [allArtist, setAllArtist] = useState<any>()
     
@@ -35,7 +37,6 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
     const [nameAlbum, setNameAlbum] = useState("")
     const [yearAlbum, setYearAlbum] = useState("")
 
-    const [cardForm, setCardForm] = useState(openCard);
     const [confirmDialogAlert, setConfirmDialogAlert] = useState(false);
     const [sucessDialog, setSucessDialog] = useState(false);
     const [errorDialog, setErrorDialog] = useState(false);
@@ -43,19 +44,15 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
         title: '',
         description: ''
     })
-
+    
+    const [cardForm, setCardForm] = useState(openCard);
     useEffect(() => {
         if (openCard) {
             setCardForm(openCard)
         }
     },[openCard])
 
-    useEffect(() => {
-        setArtist(albumEditDatas?.artist)
-        setNameAlbum(albumEditDatas?.nameAlbum)
-        setYearAlbum(albumEditDatas?.yearAlbum)
-    }, [albumEditDatas && editAlbum])
-
+    // Get artists for form select
     useEffect(() => {
         const fetchArtists = async () => {
             const responseArtists = await getAllArtistsService();
@@ -65,9 +62,17 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({ albumEditDatas, editAlbum, o
         fetchArtists()
     }, [])
 
+    // Set data to edit in the form
+    useEffect(() => {
+        setArtist(albumEditDatas?.artist)
+        setNameAlbum(albumEditDatas?.nameAlbum)
+        setYearAlbum(albumEditDatas?.yearAlbum)
+    }, [albumEditDatas && editAlbum]) // If "editAlbum" (which comes from the "Playlist" screen directly) is true, and has data to edit, set the input values
+
+    // Part that validates the form and consults the service
     const [formState, formAction] = useFormState(
         (prevState:any, formData:FormData) => 
-        AlbumAction(session, prevState, formData),
+        AlbumAction(userId, editAlbum, prevState, formData),
         INITIAL_STATE
     );
 
