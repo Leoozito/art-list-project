@@ -10,12 +10,12 @@ export default function Home() {
   const [userRole , setUserRole] = useState<string>()
 
   useEffect(() => {
-    if (session != undefined && session != null) {
+    if (session) {
       setUserId(session?.user?.id)
       setUserRole(session?.user?.role)
-      console.log(session)
+      console.log("LOGADO",session)
     } else {
-      console.log(session)
+      console.log("NÃO LOGADO",session)
     }
   }, [session])
 
