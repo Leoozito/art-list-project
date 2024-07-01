@@ -30,7 +30,7 @@ const signUpSchema = z.object({
     path: ["confirm_password"]
 });
 
-export async function registerUserAction(prevState: any, formData: FormData) {
+export async function registerUserAction(roleUser:string, prevState: any, formData: FormData) {
     const validatedFields = signUpSchema.safeParse({
         firstName: formData.get("firstName"),
         lastName: formData.get("lastName"),
@@ -54,7 +54,7 @@ export async function registerUserAction(prevState: any, formData: FormData) {
             firstName: validatedFields.data.firstName,
             lastName: validatedFields.data.lastName
         },
-        role: "user",
+        role: roleUser,
         username: validatedFields.data.username,
         email: validatedFields.data.email,
         password: validatedFields.data.password,
@@ -78,9 +78,6 @@ export async function registerUserAction(prevState: any, formData: FormData) {
         message: "Failed to Register.",
       };
     }
-  
-    // cookies().set("id", responseData.id);
-    // cookies().set("role", responseData.role);
 
-    redirect("/playlist");
+    redirect("/auth/sign-in");
 }

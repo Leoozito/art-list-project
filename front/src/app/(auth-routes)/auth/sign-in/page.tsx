@@ -59,8 +59,9 @@ const Login = () => {
                                         text="Log In"
                                     />
                                     <p className="text-lg font-semibold text-gray-900">Don't have an account with us yet?</p>
-                                    <Link 
+                                    <Link
                                         href='/auth/sign-up' 
+                                        className='text-blue-600' 
                                     >
                                         Click here and register
                                     </Link>
