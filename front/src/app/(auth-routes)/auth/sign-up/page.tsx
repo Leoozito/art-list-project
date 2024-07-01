@@ -16,12 +16,13 @@ const INITIAL_STATE = {
 
 const SignUp = () => {
     
+    const [role, setRole] = useState("user")
+
     const [formState, formAction] = useFormState(
-        registerUserAction,
+        (prevState:any, formData:FormData) => 
+        registerUserAction(role, prevState, formData),        
         INITIAL_STATE
     );
-
-    const [role, setRole] = useState("user")
 
     return(
 
@@ -34,18 +35,22 @@ const SignUp = () => {
                     </div>
 
                     <div className='w-full rounded-md py-2.5 justify-center flex items-center'>
-                        {/* <button 
-                            onClick={() => setRole("user")} type="button" className={`inline-flex items-center px-8 py-4 text-xl font-extrabold text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ${role === 'user' ? 'text-white bg-gray-900' : 'text-gray-900 bg-[#ffffff]'}`}
+                        <button 
+                            onClick={() => setRole("user")} 
+                            type="button" 
+                            className={`inline-flex items-center px-8 py-4 text-xl font-extrabold border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ${role === 'user' ? 'text-white bg-gray-900' : 'text-gray-900 bg-[#ffffff]'}`}
                         >
                             <FaRegUser className="mr-2"/>
                             User
                         </button>
                         <button 
-                            onClick={() => setRole("admin")} type="button" className={`inline-flex items-center px-8 py-4 text-xl font-extrabold text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ${role === 'admin' ? 'text-white bg-gray-900' : 'text-gray-900 bg-[#ffffff]'}`}
+                            onClick={() => setRole("admin")} 
+                            type="button" 
+                            className={`inline-flex items-center px-8 py-4 text-xl font-extrabold border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ${role === 'admin' ? 'text-white bg-gray-900' : 'text-gray-900 bg-[#ffffff]'}`}
                         >
                             <RiAdminLine className="mr-2 text-2xl"/>
                             Administrator
-                        </button> */}
+                        </button>
 
                     </div>
 
@@ -115,7 +120,7 @@ const SignUp = () => {
                                         label="Confirm Password"
                                         id="confirmPassword"
                                         name="confirmPassword"
-                                        type="confirmPassword"
+                                        type="password"
                                         error={formState?.zodErrors?.confirmPassword}
                                     />
                                 </div>

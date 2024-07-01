@@ -1,15 +1,15 @@
 "use client"
 import * as z from 'zod';
 import loginUserService from "../../services/authentication/sign-in-services";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 const loginSchema = z.object({
     email: z.string()
-    .nonempty("Campo obrigatório!")
+    .min(1, "This field is required")
     .email("Invalid email format"),
 
-    password: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
+    password: z.string()
+    .min(8, {message: 'Password must be at least 8 characters long'}),
 })
 
 export async function loginUserAction(prevState: any, formData: FormData) {
