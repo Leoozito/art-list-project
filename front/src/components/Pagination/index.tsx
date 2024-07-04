@@ -26,7 +26,7 @@ const Pagination = ({ page, limit, total }: PaginationProps) => {
     return (
         <>
             <nav aria-label="Page navigation example">
-                <ul className="inline-flex -space-x-px text-base h-10">
+                <ul className="mt-4 inline-flex -space-x-px text-base h-10">
                     {pages.map((page, index) => {
 
                         const isEllipsis = page == ELLIPSIS_LEFT || page == ELLIPSIS_RIGHT;

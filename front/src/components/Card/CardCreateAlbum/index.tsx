@@ -5,9 +5,9 @@ const CardCreateAlbum = ({onClick}:any) => {
         <>
             <div
                 onClick={onClick}
-                className="cursor-pointer flex-col flex-grow mx-60 flex"
+                className="sm:mt-4 lg:mt-8 cursor-pointer flex-col flex-grow mx-60 flex"
             >
-                <label className="block text-sm font-medium leading-6 text-gray-900">Create new album</label>
+                <label className="block text-sm lg:text-lg font-medium leading-6 text-gray-900">Create new album</label>
                 <div className="hover:bg-gray-100 flex-col flex justify-center items-center rounded-lg border border-dashed border-gray-900/25 p-8 text-center sm:text-sm lg:text-lg leading-6 text-gray-600">
                     <PiMusicNotesPlusFill
                         className="mb-4 text-center text-8xl text-gray-300"

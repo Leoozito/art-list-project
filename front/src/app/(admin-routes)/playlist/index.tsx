@@ -48,7 +48,6 @@ const Playlist = ({datasUser}: UserProps, {searchParams}:PageProps) => {
 
     useEffect(() => {
         setLoading(true)
-        console.log("olaa", datasUser)
         const fetchAlbums = async () => {
             const datasAlbums = await getAllAlbumsService(page, limit, datasUser.userId);
             setAllAlbums(datasAlbums?.albums);
@@ -58,10 +57,6 @@ const Playlist = ({datasUser}: UserProps, {searchParams}:PageProps) => {
 
         fetchAlbums()      
     }, [datasUser])
-
-    useEffect(() => {
-        setOpenCardCreateAlbum(false)
-    }, [openCardCreateAlbum])
 
     const editAlbumById = async (id:number) => {
         setEdit(true)
@@ -88,39 +83,44 @@ const Playlist = ({datasUser}: UserProps, {searchParams}:PageProps) => {
             {loading && (
                 <CircularProgress/>
             )}
-            {allAlbums && (
-                <>
-                    <AlertDialog
-                        content={alertContent}
-                        error={errorDialog}
-                    />
-                    <CardLayout>
-                        <CardCreateAlbum 
-                            onClick={() => setOpenCardCreateAlbum  (!openCardCreateAlbum)}
-                        />                                
-                        <div className="mt-14 px-10 gap-12 grid md:grid-cols-2 lg:grid-cols-3">
+            <AlertDialog
+                content={alertContent}
+                error={errorDialog}
+            />
+            <CardLayout>
+                <CardCreateAlbum 
+                    onClick={() => setOpenCardCreateAlbum(!openCardCreateAlbum)}
+                />                                
+                <div className="mt-14 px-10 gap-12 grid md:grid-cols-2 2xl:grid-cols-3">
+                    {allAlbums && (
+                        <>
                             {allAlbums.map((album:any) => 
-                                <AlbumCard
-                                    key={album.id}
-                                    onEditClick={() => editAlbumById(album.id)}
-                                    albumDatas={album}                            
-                                />
+                                <>
+                                    <AlbumCard
+                                        key={album.id}
+                                        onEditClick={() => editAlbumById(album.id)}
+                                        albumDatas={album}                            
+                                    />
+                                </>
                             )}
-                        </div>
-                        <Pagination
-                            page={page}
-                            limit={limit}
-                            total={metadata}
-                        />
-                        <FormPlaylist
-                            userId={datasUser.userId}
-                            editAlbum={edit}
-                            albumEditDatas={albumEditData}
-                            openCard={openCardCreateAlbum}
-                        />
-                    </CardLayout>
-                </>
-            )}
+                            <div className="col-span-3 justify-center flex">
+                                <Pagination
+                                    page={page}
+                                    limit={limit}
+                                    total={metadata}
+                                />
+                            </div>
+                        </>
+                    )}
+                </div>
+                <FormPlaylist
+                    userId={datasUser.userId}
+                    editAlbum={edit}
+                    albumEditDatas={albumEditData}
+                    openCard={openCardCreateAlbum}
+                    onClose={() => setOpenCardCreateAlbum(false)}
+                />
+            </CardLayout>
         </>    
     )
 }
