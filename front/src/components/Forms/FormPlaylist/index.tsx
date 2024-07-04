@@ -11,8 +11,9 @@ import AlertDialog from "@/components/Dialogues/AlertDialog";
 
 interface FormPlaylistProps {
     userId: number | undefined,
-    editAlbum: boolean;
-    openCard: boolean;
+    editAlbum: boolean,
+    openCard: boolean,
+    onClose: () => void,
     albumEditDatas: { 
         idAlbum: number,
         artist: any, 
@@ -29,7 +30,7 @@ const INITIAL_STATE = {
 
 // Form to create and edit albums
 
-const FormPlaylist:React.FC<FormPlaylistProps> = ({userId ,albumEditDatas, editAlbum, openCard }) => {
+const FormPlaylist:React.FC<FormPlaylistProps> = ({userId ,albumEditDatas, editAlbum, openCard, onClose }) => {
     const formRef = useRef(null);
     const [allArtist, setAllArtist] = useState<any>()
     
@@ -47,9 +48,7 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({userId ,albumEditDatas, editA
     
     const [cardForm, setCardForm] = useState(openCard);
     useEffect(() => {
-        if (openCard) {
-            setCardForm(openCard)
-        }
+        setCardForm(openCard)
     },[openCard])
 
     // Get artists for form select
@@ -98,7 +97,7 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({userId ,albumEditDatas, editA
             setCardForm(false)
             setContentDialog({
                 title: editAlbum ? 'Successfully edit album' : 'Successfully create new album',
-                description: `Album ${nameAlbum} ${editAlbum ? 'edited' : 'created'}`
+                description: `Album " ${nameAlbum} " ${editAlbum ? 'edited' : 'created'}`
             });
             setSucessDialog(true)
         } catch (error) {
@@ -130,6 +129,7 @@ const FormPlaylist:React.FC<FormPlaylistProps> = ({userId ,albumEditDatas, editA
 
             <Modal
                 openModal={cardForm}
+                onClose={onClose}
             >
                 <div className="mb-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form 

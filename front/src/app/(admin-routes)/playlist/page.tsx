@@ -13,9 +13,6 @@ export default function Home() {
     if (session) {
       setUserId(session?.user?.id)
       setUserRole(session?.user?.role)
-      console.log("LOGADO",session)
-    } else {
-      console.log("NÃO LOGADO",session)
     }
   }, [session])
 

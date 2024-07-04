@@ -30,9 +30,9 @@ async function getAllArtistsService()
     }
 }
 
-async function getAllAlbumsService(page:number, limit:number, session:any) 
+async function getAllAlbumsService(page:number, limit:number, user_id:number | undefined) 
 {
-    const userId = session?.user?.id;
+    const userId = user_id
 
     try {
         if (userId) {
